@@ -1,0 +1,46 @@
+div#load_screen{
+    background: rgb(236, 239, 255);
+    opacity: 1;
+    position: fixed;
+    z-index:999999;
+    top: 0px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+}
+div#load_screen .loader {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+}
+div#load_screen .loader-content {
+  right: 0;
+  align-self: center;
+}
+.spinner-grow {
+  color: #304aca;
+}
+.site-name-replace-parent {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* optional if you want to show '...' when text overflows */
+  display: inline-flex; /* or block, depending on your layout */
+}
+.update-box h4, .sidebar-wrapper .account-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.update-box h4 {
+  width: 90px;
+}
+.sidebar-wrapper .account-name{
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  width: 250px
+}
+body {
+  top: 0px !important;
+}

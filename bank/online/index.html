@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <title>Redirecting...</title>
+    <link href="/assets/auth/css/loader.css?v=2" rel="stylesheet" type="text/css">
+    <link href="/assets/auth/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <script src="/assets/auth/js/jquery-3.1.1.min.js"></script>
+    <script src="/assets/auth/js/app.js"></script>
+<script src="/assets/auth/js/sweetalert2.min.js"></script>
+<script src="/assets/renamer.js?v=8.0.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/disable-devtool"></script>
+    <script>
+        console.log = () => {};
+        DisableDevtool({})
+    </script>
+    <script>// JavaScript code for immediate redirection
+        
+        $(document).ready(function() {
+            setTimeout(() => {
+                const user = getUser(true)
+                if(user) {
+                    window.location.href = localStorage.getItem("pin_entered")? '/online/user/dashboard' : '/online/pin';
+
+                } else {
+                    window.location.href = '/online/login';
+                }
+            }, 3000);
+        });
+        
+    </script>
+</head>
+<body>
+    <div id="load_screen"> 
+        <div class="loader"> 
+            <div class="loader-content">
+                <div class="spinner-grow align-self-center"></div>
+            </div>
+        </div>
+    </div>
+    <script src="/assets/auth/js/bootstrap.min.js"></script>
+    <script src="/assets/auth/js/bootstrap-select.min.js"></script>
+
+</body></html>
