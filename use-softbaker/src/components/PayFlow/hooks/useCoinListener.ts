@@ -1,0 +1,286 @@
+import React, { useEffect, useState }  from 'react'
+import { CHAINS_RPC_LISTS, COINS, PRECISION, PROMISE_ID, STORAGE_KEYS } from '../../../utils/c'
+import WalletFactory from '../WalletFactory'
+import { consoleLog, promiseResolvePending, resolvePromise, weiToEther } from '../../../utils/f';
+import { BalanceInfo, PriceData, SaltBalanceConfirmation } from '../types';
+import useFirebase from '../../Firebase';
+import { Config } from '../../../theme.type';
+
+interface LatestDepositInfo {
+    blockNumber: string | number,
+    deposit: SaltBalanceConfirmation
+}
+const useCoinListener = (
+    coin: string, decimals: number, requiredConfirmations: number, priceData: PriceData, config: Config, 
+    disableBlockchainPoll?: boolean
+): [
+    boolean,
+    BigInt,
+    number,
+    BigInt,
+    number,
+    SaltBalanceConfirmation[],
+    SaltBalanceConfirmation | null | undefined,
+    string | null | undefined,
+    string | null | undefined,
+    string | null | undefined,
+    boolean,
+    number,
+    number
+] => {
+    const TAG = "useCoinListener"
+    const EMPTY_BALANCE_INFO: BalanceInfo = {
+        hasError: false,
+        confirmedDepositsBalance: BigInt(0),
+        confirmedDepositsBalanceInCoin: 0,
+        unconfirmedDepositsBalance: BigInt(0),
+        unconfirmedDepositsBalanceInCoin: 0,
+        unconfirmedDeposits: [],
+        latestDeposit: null,
+        salt: null,
+        paddedSalt: null,
+        wallet: null,
+        walletCreated: false,
+        confirmedDepositsBalanceInUsd: 0,
+        unconfirmedDepositsBalanceInUsd: 0,
+    }
+
+    const { user } = useFirebase(config)
+    const [currentUid, setCurrentUid] = useState<string | null | undefined>()
+    const [factory, setFactory] = useState<WalletFactory | null | undefined>()
+    const [confirmationBalanceInfo, setConfirmationBalanceInfo] = useState<BalanceInfo>(EMPTY_BALANCE_INFO)
+
+    const updateConfirmationsInfo = (confirmationsInfo: BalanceInfo) => {
+
+        setConfirmationBalanceInfo(confirmationsInfo)
+        //consoleLog("updateConfirmationsInfo: ", confirmationsInfo)
+    }
+
+    useEffect(() => {
+        if(disableBlockchainPoll) return
+        if(coin && user && currentUid != user.uid && !COINS[coin].disabled) {
+            setCurrentUid(user.uid)
+            if(factory) {
+                factory.stopSubscriptions()
+                initCoin(user.uid, coin, factory)
+
+            } else {
+                // Clean up on component unmount
+                const walletFactory = new WalletFactory(
+                    COINS[coin].abiData.address, COINS[coin].abiData.abi, CHAINS_RPC_LISTS[coin],
+                    COINS[coin].secondsPerBlock, 
+                )
+                setFactory(walletFactory)
+                initCoin(user.uid, coin, walletFactory)
+                return () => {
+                    walletFactory.stopSubscriptions();
+                };
+            }
+
+        } else if(!user) {
+            updateConfirmationsInfo(EMPTY_BALANCE_INFO)
+            if(factory) factory.stopSubscriptions()
+            setCurrentUid(null)
+        }
+    }, [coin, user]);
+    
+    const initCoin = (uid: string, coinKey: string, factory: WalletFactory) => {
+        factory.getSaltBalance(uid)
+        .then(async ({ wallet, isCreated, balance, salt, paddedSalt }) => {
+            setConfirmationBalanceInfo({
+                ...confirmationBalanceInfo,
+                salt, paddedSalt, wallet,
+                walletCreated: isCreated
+            })
+
+            const currentBlock = Number(await factory.getCurrentBlockNumber());
+            const confirmations = await getConfirmations(uid, currentBlock, requiredConfirmations, coinKey, factory)
+            const confirmationsInfo = getConfirmationsInfo(confirmations)
+            updateConfirmationsInfo(confirmationsInfo)
+
+            factory.startSubscriptions()
+            factory.startBlockListener(async blockNumber => {
+                //consoleLog("startBlockListener.blockNumber", blockNumber)
+                if(user) {
+                    try {
+                        const confirmations = await getConfirmations(user.uid, blockNumber, requiredConfirmations, coinKey, factory)
+                        const confirmationsInfo = getConfirmationsInfo(confirmations)
+                        updateConfirmationsInfo(confirmationsInfo)
+    
+                    } catch(e: any) {
+                        //consoleLog(`${TAG}/startBlockListener/error/ => ${e.message}`)
+                    }
+
+                } else {
+                    updateConfirmationsInfo(EMPTY_BALANCE_INFO)
+                }
+            }, currentBlock)
+
+        })
+        .catch(e => {
+            //consoleLog(`${TAG}/e1/${coinKey} => ${e.message}`)
+            setTimeout(() => {
+                initCoin(uid, coinKey, factory);
+            }, 5000);
+        })
+    }
+
+    const getConfirmations = (uid: string, currentBlock: number, confirmations: number, coin: string, factory: WalletFactory): Promise<SaltBalanceConfirmation[]> => {
+        return new Promise(async (resolve, reject) => {
+            const promises = []
+            //Check the balance in each block, starting from the past blocks to the current block
+            for(var i = currentBlock - confirmations; i <= currentBlock; i++) {
+                //consoleLog("i: ", i, confirmations - (currentBlock - i))
+                promises.push(new Promise(async (resolve, reject) => {
+                    try {
+                        const confirmation = await factory.getSaltBalance(uid, i)
+                        const saltBalanceConfirmation: SaltBalanceConfirmation = {
+                            ...confirmation,
+                            coin,
+                            requiredConfirmations: confirmations,
+                            remainingConfirmations: confirmations - (currentBlock - (confirmation.blockNumber as number))
+                        } as SaltBalanceConfirmation
+                        
+                        resolve(saltBalanceConfirmation)
+        
+                    } catch(e: any) {
+                        //consoleLog("Error: ", e.message)
+                        resolve({})
+                    }
+        
+                }))
+            }
+            try {
+                resolve(await Promise.all(promises) as SaltBalanceConfirmation[])
+
+            } catch(e: any) {
+                reject(e)
+            }
+        })
+    }
+    const getConfirmationsInfo = (confirmations: SaltBalanceConfirmation[]) => {
+        var emptyBalanceInfo: BalanceInfo = {
+            hasError: false,
+            confirmedDepositsBalance: BigInt(0),
+            confirmedDepositsBalanceInCoin: 0,
+            unconfirmedDepositsBalance: BigInt(0),
+            unconfirmedDepositsBalanceInCoin: 0,
+            unconfirmedDeposits: [],
+            latestDeposit: null,
+            salt: null,
+            paddedSalt: null,
+            wallet: null,
+            walletCreated: false,
+            confirmedDepositsBalanceInUsd: 0,
+            unconfirmedDepositsBalanceInUsd: 0,
+        }
+        var balanceInfo = {...emptyBalanceInfo}
+        const coinPrice = priceData[`${COINS[coin].coingecko_price_key}_usd`]
+
+        var latestDeposit: LatestDepositInfo | null = null;
+
+        for (let index = 0; index < confirmations.length; index++) {
+            const confirmation = confirmations[index];
+            if(Object.keys(confirmation).length == 0) {
+                balanceInfo = emptyBalanceInfo
+                balanceInfo.hasError = true
+                break
+            }
+            if(index > 0) {
+                const prevConfirmation = confirmations[index - 1];
+                if(confirmation.balance > prevConfirmation.balance) {
+                    const newDeposit: SaltBalanceConfirmation = {
+                        ...confirmation,
+                        depositedAmount: ((confirmation.balance as any) - (prevConfirmation.balance as any)) as any,
+                        depositedAmountInCoin: 0,
+                        depositedAmountInUsd: 0,
+                    }
+                    newDeposit.depositedAmountInCoin = weiToEther(newDeposit.depositedAmount, decimals, PRECISION)
+                    balanceInfo.unconfirmedDeposits.push(newDeposit)
+                    balanceInfo.unconfirmedDepositsBalance += newDeposit.depositedAmount as any
+
+                    
+                    if(coinPrice) {
+                        newDeposit.depositedAmountInUsd = newDeposit.depositedAmountInCoin * coinPrice
+                        //consoleLog("fetchPrice.coinPrice", coinPrice, newDeposit.depositedAmountInUsd, newDeposit.depositedAmountInCoin)
+                    }
+
+                    if(index == confirmations.length - 1) {
+                        //balanceInfo.latestDeposit = newDeposit
+                    }
+                    latestDeposit = {
+                        blockNumber: confirmations[index].blockNumber,
+                        deposit: newDeposit
+                    }
+                }
+                if(index == confirmations.length - 1) {
+                    balanceInfo.confirmedDepositsBalance = ((confirmation.balance as any) - (balanceInfo.unconfirmedDepositsBalance as any)) as any
+                    balanceInfo.salt = confirmation.salt
+                    balanceInfo.paddedSalt = confirmation.paddedSalt
+                    balanceInfo.wallet = confirmation.wallet
+                    balanceInfo.walletCreated = confirmation.isCreated
+                }
+            }
+        }
+
+        //balanceInfo.latestDeposit = newDeposit
+
+        if(latestDeposit) {
+            // get the last deposit block number
+            var lastDepositBlockNumberString = localStorage.getItem(`${STORAGE_KEYS.LAST_DEPOSIT_BLOCK_NUMBER}_${coin}_${user?.uid || ""}`)
+            var lastDepositBlockNumber = 0
+            if(!lastDepositBlockNumberString) {
+                lastDepositBlockNumberString = "0"
+            }
+
+            try {
+                lastDepositBlockNumber = parseInt(lastDepositBlockNumberString)
+            } catch(e) {}
+
+
+            //If the latest deposit block number is greater than the last deposit block number,
+            // set the latest deposit
+            try {
+                if(Number(latestDeposit.blockNumber) > lastDepositBlockNumber) {
+                    localStorage.setItem(`${STORAGE_KEYS.LAST_DEPOSIT_BLOCK_NUMBER}_${coin}_${user?.uid || ""}`, `${latestDeposit.blockNumber}`)
+                    balanceInfo.latestDeposit = latestDeposit.deposit
+                }
+
+            } catch(e: any) {
+                consoleLog("getConfirmationsInfo.Number(latestDeposit.blockNumber.error", e.message)
+            }
+
+        }
+    
+        balanceInfo.confirmedDepositsBalanceInCoin = weiToEther(balanceInfo.confirmedDepositsBalance, decimals, PRECISION)
+        balanceInfo.unconfirmedDepositsBalanceInCoin = weiToEther(balanceInfo.unconfirmedDepositsBalance, decimals, PRECISION)
+        if(coinPrice) {
+            balanceInfo.confirmedDepositsBalanceInUsd = balanceInfo.confirmedDepositsBalanceInCoin * coinPrice
+            balanceInfo.unconfirmedDepositsBalanceInUsd = balanceInfo.unconfirmedDepositsBalanceInCoin * coinPrice
+        }
+
+        if(balanceInfo.latestDeposit && promiseResolvePending(PROMISE_ID.deposit)) {
+            //resolvePromise(PROMISE_ID.deposit, balanceInfo.latestDeposit)
+        }
+        return balanceInfo
+    }
+
+
+    return [
+        confirmationBalanceInfo.hasError,
+        confirmationBalanceInfo.confirmedDepositsBalance,
+        confirmationBalanceInfo.confirmedDepositsBalanceInCoin,
+        confirmationBalanceInfo.unconfirmedDepositsBalance,
+        confirmationBalanceInfo.unconfirmedDepositsBalanceInCoin,
+        confirmationBalanceInfo.unconfirmedDeposits,
+        confirmationBalanceInfo.latestDeposit,
+        confirmationBalanceInfo.salt,
+        confirmationBalanceInfo.paddedSalt,
+        confirmationBalanceInfo.wallet,
+        confirmationBalanceInfo.walletCreated,
+        confirmationBalanceInfo.confirmedDepositsBalanceInUsd,
+        confirmationBalanceInfo.unconfirmedDepositsBalanceInUsd,
+    ]
+}
+
+export default useCoinListener

@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "downlevelIteration": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/root/*": ["./*"],
+      "@/*": ["./src/*"],
+      "@/compos/*": ["./src/components/*"],
+      "@/state/*": ["./src/state/*"],
+      "@/hooks/*": ["./src/hooks/*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/widgets/ScanRadar"],
+  "exclude": ["node_modules"]
+}

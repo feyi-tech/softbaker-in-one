@@ -1,0 +1,16 @@
+{
+  "name": "firebase",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "increased_time_out": "export FUNCTIONS_DISCOVERY_TIMEOUT=30",
+    "dfunc": "firebase deploy --only functions"
+  },
+  "author": "feyi-tech",
+  "license": "ISC",
+  "dependencies": {
+    "fflate": "^0.8.2"
+  }
+}

@@ -1,0 +1,41 @@
+{
+   "rpcUrl": "https://bsc-dataseed1.binance.org",
+   "chainId": 56,
+   "address": "0x2a0f7EAb9Da5092CF598a0854994312A6d38cd75",
+   "timestamp": "1/29/2024, 11:23:37 PM",
+   "network": "Bsc",
+   "contractName": "Wallet",
+   "abi": [
+      {
+         "inputs": [],
+         "stateMutability": "nonpayable",
+         "type": "constructor"
+      },
+      {
+         "inputs": [],
+         "name": "factory",
+         "outputs": [
+            {
+               "internalType": "address",
+               "name": "",
+               "type": "address"
+            }
+         ],
+         "stateMutability": "view",
+         "type": "function",
+         "constant": true
+      },
+      {
+         "stateMutability": "payable",
+         "type": "receive",
+         "payable": true
+      },
+      {
+         "inputs": [],
+         "name": "initialize",
+         "outputs": [],
+         "stateMutability": "nonpayable",
+         "type": "function"
+      }
+   ]
+}

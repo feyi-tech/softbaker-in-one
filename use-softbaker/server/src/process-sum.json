@@ -1,0 +1,310 @@
+{
+	"balance": {
+		"totalBnb": "1858992372171921735",
+		"totalUsd": 1134.524454812802,
+		"totalWallets": 43
+	},
+	"balances": [
+		{
+			"salt": "GCmuMpwRXsfz8kJfrPtwqO9DzTT2",
+			"wallet": "0x021bf7FC79cE59aFC5C605fF6b3ea3EBDfA9456a",
+			"balance_in_units": "4366508576108506",
+			"balance_in_bnb": 0.004366508576108506,
+			"balance_in_usd": 2.66483651891326
+		},
+		{
+			"salt": "FbnHzZH88BNHbrS3OQKgjnpW4dh1",
+			"wallet": "0xCc4Fec438e444F9974CC738fE8Ff10415201E46A",
+			"balance_in_units": "4666600556492116",
+			"balance_in_bnb": 0.004666600556492116,
+			"balance_in_usd": 2.8479796536215733
+		},
+		{
+			"salt": "RMqmhaLpQFOvbvaMEQbsNBc64j32",
+			"wallet": "0xE835ef8E62Ab622C2e785B6DcaAd8B84e05e3851",
+			"balance_in_units": "8203840000000000",
+			"balance_in_bnb": 0.00820384,
+			"balance_in_usd": 5.0067215136
+		},
+		{
+			"salt": "APZlLtcxMBgHNZq0M7l1nMepCw93",
+			"wallet": "0xc9Fb9EbAaA70a624272Db504AAec614eC08Da21A",
+			"balance_in_units": "7292500000000000",
+			"balance_in_bnb": 0.0072925,
+			"balance_in_usd": 4.450539825
+		},
+		{
+			"salt": "4qBnzpPwBnUzVQn70iLMQ9GODnv2",
+			"wallet": "0x9fF767087Fbaa57C1666027Aa4583E7ad256f3A6",
+			"balance_in_units": "5209910000000000",
+			"balance_in_bnb": 0.00520991,
+			"balance_in_usd": 3.1795559739
+		},
+		{
+			"salt": "1G5JCiRo5OWxr0DxQqRIhUzvJlc2",
+			"wallet": "0xE82B7E0556Da11A2402AD4Df4fFA7112e72b1c1a",
+			"balance_in_units": "6000000000000000",
+			"balance_in_bnb": 0.006,
+			"balance_in_usd": 3.66174
+		},
+		{
+			"salt": "LedXpq07iCZgVkymvjdApxMqSjH3",
+			"wallet": "0xB5C32215425De434fa8547E386a4463D1065b9B2",
+			"balance_in_units": "11286490000000000",
+			"balance_in_bnb": 0.01128649,
+			"balance_in_usd": 6.888031982099999
+		},
+		{
+			"salt": "k5aD7DSGeeQuMwuiX3xWcDLJrBf1",
+			"wallet": "0xFF05f5B4F5F7E2D66d2A6a61361b44e390B2E9bb",
+			"balance_in_units": "9225201000000000",
+			"balance_in_bnb": 0.009225201,
+			"balance_in_usd": 5.63004791829
+		},
+		{
+			"salt": "JlCIbphEx5gAnw50w5D1nF31v9g2",
+			"wallet": "0xC06322eCc9135Ad283b70aaa7330Adf39e01D2c1",
+			"balance_in_units": "9968700000000000",
+			"balance_in_bnb": 0.0099687,
+			"balance_in_usd": 6.083797923
+		},
+		{
+			"salt": "4s4ShTkNrbX7QGR1mgBOpHMZDha2",
+			"wallet": "0xA0cC900a7fA1Ef26084fe3D9c67dC2fCee9DB2e7",
+			"balance_in_units": "11000000000000000",
+			"balance_in_bnb": 0.011,
+			"balance_in_usd": 6.713189999999999
+		},
+		{
+			"salt": "NOJgOh07mifXQU4hr3gryXUNPJ92",
+			"wallet": "0xA4463d1Bef2694d499573BC8faDb98b2789D6BFd",
+			"balance_in_units": "12437820000000000",
+			"balance_in_bnb": 0.01243782,
+			"balance_in_usd": 7.5906771678
+		},
+		{
+			"salt": "o4DWPLW1a3gvtzv1ceUDFH6ouQj2",
+			"wallet": "0xd1Dc916B65f6b461435CdF5D3a0949D47CAa0d81",
+			"balance_in_units": "10754110000000000",
+			"balance_in_bnb": 0.01075411,
+			"balance_in_usd": 6.5631257919
+		},
+		{
+			"salt": "wROMKVfXQ1hJRcHIGhEEyQIIXo33",
+			"wallet": "0x0E8B1e8355B0d2FD1527FAbbB5974428dc848FA1",
+			"balance_in_units": "15096000000000000",
+			"balance_in_bnb": 0.015096,
+			"balance_in_usd": 9.212937839999999
+		},
+		{
+			"salt": "gN4zLbzNg5SPEF0giD7So2NiyOv2",
+			"wallet": "0xe8d21d9c86E9937eCc0c2540518bEb07980B1E58",
+			"balance_in_units": "16683100000000000",
+			"balance_in_bnb": 0.0166831,
+			"balance_in_usd": 10.181529098999999
+		},
+		{
+			"salt": "t18yPXwYYkTIKfdIAOocnowDerm1",
+			"wallet": "0x394F0dd59c3be69f2400abD3659368aDea6dD157",
+			"balance_in_units": "11099292099926811",
+			"balance_in_bnb": 0.011099292099926812,
+			"balance_in_usd": 6.773786975664334
+		},
+		{
+			"salt": "uKZC0TasXyfyEvoKHU7uffC33H42",
+			"wallet": "0xbe24C4ddbB1a3C7704Caa53430D9e58B0798cca2",
+			"balance_in_units": "22377000000000000",
+			"balance_in_bnb": 0.022377,
+			"balance_in_usd": 13.65645933
+		},
+		{
+			"salt": "s8Vig71hYQcBKAvYWLwvc3ihEAA3",
+			"wallet": "0x461Fb874f93d76D5A910fEb633728d8C2e45bef8",
+			"balance_in_units": "24500000000000000",
+			"balance_in_bnb": 0.0245,
+			"balance_in_usd": 14.952105
+		},
+		{
+			"salt": "Mo7V2XUVkKfBQHSAKJcunepeQ9G3",
+			"wallet": "0xB747Caa3ceea8C03554F6b2eF82D56836521927a",
+			"balance_in_units": "19073760000000000",
+			"balance_in_bnb": 0.01907376,
+			"balance_in_usd": 11.640524990399998
+		},
+		{
+			"salt": "2zCGgiVU5fRzJze61DnDGtRQc8g1",
+			"wallet": "0x4A309A2a0965bE5457cd909EF91cDFd81fF9489f",
+			"balance_in_units": "26461800000000000",
+			"balance_in_bnb": 0.0264618,
+			"balance_in_usd": 16.149371922
+		},
+		{
+			"salt": "sb7wGJDyBIdyi7a5XWuRIGoW1M33",
+			"wallet": "0x42Fe62b800Ed1E16ABA91b0123239a6534426F4f",
+			"balance_in_units": "20066710000000000",
+			"balance_in_bnb": 0.02006671,
+			"balance_in_usd": 12.2465124459
+		},
+		{
+			"salt": "NgFO43EjZoQJ7p8J3SsyLlihGVu1",
+			"wallet": "0x8AC44295FAf7E77cc078D10db1D5FFD51e3aF6DD",
+			"balance_in_units": "29500000000000000",
+			"balance_in_bnb": 0.0295,
+			"balance_in_usd": 18.003555
+		},
+		{
+			"salt": "m0eucStWHjckuUIcgVUhhpEviPt2",
+			"wallet": "0xbcEB7e02c6b9Ac156Ba24b4bEA54d6DBd1280D3F",
+			"balance_in_units": "31839200000000000",
+			"balance_in_bnb": 0.0318392,
+			"balance_in_usd": 19.431145368
+		},
+		{
+			"salt": "aoODRpVIUrZMfmV0forDDAfzaFW2",
+			"wallet": "0x21d0AE103fc4C8CA8A7Ea12C03b71B049D7760C2",
+			"balance_in_units": "25430500000000000",
+			"balance_in_bnb": 0.0254305,
+			"balance_in_usd": 15.519979845
+		},
+		{
+			"salt": "Fe9ODX7BfAfGkYed3y3H3MW6ZzZ2",
+			"wallet": "0x224544EBDeeAef6cd859185C000874855Af22be8",
+			"balance_in_units": "34031340000000000",
+			"balance_in_bnb": 0.03403134,
+			"balance_in_usd": 20.7689864886
+		},
+		{
+			"salt": "LvfcxMTtDFam1MMz71HSwmcm9QD3",
+			"wallet": "0x79aEE4A7a6271c70518D8920129F6ce5fA967c19",
+			"balance_in_units": "33155500000000000",
+			"balance_in_bnb": 0.0331555,
+			"balance_in_usd": 20.234470095
+		},
+		{
+			"salt": "OJv0qjmjKGTK2TCbiVVkWRMhMpX2",
+			"wallet": "0x84EeF7C73356EBE4f0fDd089E29687dfE390cD19",
+			"balance_in_units": "35983670000000000",
+			"balance_in_bnb": 0.03598367,
+			"balance_in_usd": 21.9604739643
+		},
+		{
+			"salt": "8cjbAu7wJBQy7783FCTYeHIrevX2",
+			"wallet": "0xE37F97F6776E970768A88Ef124C8296Ab9e6e9C5",
+			"balance_in_units": "27060470000000000",
+			"balance_in_bnb": 0.02706047,
+			"balance_in_usd": 16.514734236299997
+		},
+		{
+			"salt": "jHMuX9sGmjhyv6MIMjcdIk9RqCP2",
+			"wallet": "0x778E5169Ba66c2c1f0264903b5fd3415a76B2b6A",
+			"balance_in_units": "28871640000000000",
+			"balance_in_bnb": 0.02887164,
+			"balance_in_usd": 17.620073175599998
+		},
+		{
+			"salt": "qGY6ASrBZXcPiIQKPicRAlRpw4O2",
+			"wallet": "0xA8F6D3E78cb1c108b36da343dadE87ab4550a3aF",
+			"balance_in_units": "36003560000000000",
+			"balance_in_bnb": 0.03600356,
+			"balance_in_usd": 21.972612632399997
+		},
+		{
+			"salt": "NE2gfgBoHodbWWkBoI0Dn8yMRJ03",
+			"wallet": "0xa48d83E7A4A56772A6950E3f0bF285563A0FdE38",
+			"balance_in_units": "28047410000000000",
+			"balance_in_bnb": 0.02804741,
+			"balance_in_usd": 17.1170538489
+		},
+		{
+			"salt": "AFlddvoCRiXSHxBAqETvxZ8phBu1",
+			"wallet": "0x1833710f9b924E936db0177059A111e0D22B28Ff",
+			"balance_in_units": "42584607146342978",
+			"balance_in_bnb": 0.042584607146342976,
+			"balance_in_usd": 25.988959895341655
+		},
+		{
+			"salt": "MPSRPXWJDEbY6omqAduElnTuMma2",
+			"wallet": "0x9041107238c88a334f7531CFE91768C2Bc811Fd3",
+			"balance_in_units": "22260804776663761",
+			"balance_in_bnb": 0.02226080477666376,
+			"balance_in_usd": 13.585546547150125
+		},
+		{
+			"salt": "Y1UuPlC7R9VFuUkBk2AYwNilXHu2",
+			"wallet": "0x095256e90FfFE2bc26ad90Cb7d7A397139BF3122",
+			"balance_in_units": "46426430000000000",
+			"balance_in_bnb": 0.04642643,
+			"balance_in_usd": 28.333585964699996
+		},
+		{
+			"salt": "3qZzI3XdM7dT6XALwv7jCnpcQTn2",
+			"wallet": "0x781B2e28C34b844D2407377b3E9f869Be8D4F645",
+			"balance_in_units": "45737270000000000",
+			"balance_in_bnb": 0.04573727,
+			"balance_in_usd": 27.912998508299996
+		},
+		{
+			"salt": "nrpnkXw8xDgI5azlIYxuW3Gk8oJ3",
+			"wallet": "0x29134afb581119Fc253f18d33D68f1d6C634dD00",
+			"balance_in_units": "37290400000000000",
+			"balance_in_bnb": 0.0372904,
+			"balance_in_usd": 22.757958216
+		},
+		{
+			"salt": "cbdidqF1aDSuTcUcVQuV4GlJAxj1",
+			"wallet": "0xdbC44fCB7747a9B70893278c1065224ae63507F3",
+			"balance_in_units": "50354370000000000",
+			"balance_in_bnb": 0.05035437,
+			"balance_in_usd": 30.7307684673
+		},
+		{
+			"salt": "pN64iLnbf1SsR4uIYuS2psJzVQO2",
+			"wallet": "0x296A09963FAEa76feca5fCcEF86fcB39418908dd",
+			"balance_in_units": "56362200000000000",
+			"balance_in_bnb": 0.0563622,
+			"balance_in_usd": 34.397287038
+		},
+		{
+			"salt": "C5e1am4Q9YbEE869ZKOwHPoEHIY2",
+			"wallet": "0x21Dc821Ce99E8C768bAeA76bf01797a492bE0eCD",
+			"balance_in_units": "52621518016387563",
+			"balance_in_bnb": 0.05262151801638756,
+			"balance_in_usd": 32.11438623022116
+		},
+		{
+			"salt": "MOBs2jhp3PcvZ6cJ894aOwGZ4Mt1",
+			"wallet": "0x083bFf1E83072519b995ddC3a31E4B8D1E75e6b3",
+			"balance_in_units": "83227090000000000",
+			"balance_in_bnb": 0.08322709,
+			"balance_in_usd": 50.7926607561
+		},
+		{
+			"salt": "E0PWQQixX2VmdFGnOZc6VZ2jXDN2",
+			"wallet": "0x4c53e2CC585318a08c966EF2e6bf2B67F6Ad3970",
+			"balance_in_units": "108006160000000000",
+			"balance_in_bnb": 0.10800616,
+			"balance_in_usd": 65.9150793864
+		},
+		{
+			"salt": "GOTl4FKzfEb3KRVccRWXT8wEhDl2",
+			"wallet": "0x9f150d8FA3F6c2ce585BeE77B22d607af9f97fEB",
+			"balance_in_units": "145840060000000000",
+			"balance_in_bnb": 0.14584006,
+			"balance_in_usd": 89.0047302174
+		},
+		{
+			"salt": "lPMC4bfkpTPIbOUxPMaeIVs7qqA3",
+			"wallet": "0xFf5524BdB2aeD3bf17F3b64fF0c8ED2f92efBC97",
+			"balance_in_units": "155743900000000000",
+			"balance_in_bnb": 0.1557439,
+			"balance_in_usd": 95.04894473099999
+		},
+		{
+			"salt": "rm9qceGiqzbNkQXwZmBFx7SIQGi1",
+			"wallet": "0xF185EC76026E93C17ab1c7F48Ae1c3f6F4f8d8B7",
+			"balance_in_units": "446844930000000000",
+			"balance_in_bnb": 0.44684493,
+			"balance_in_usd": 272.70499232969996
+		}
+	]
+}

@@ -1,0 +1,134 @@
+<!-- storeframe.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Softbaker Store Frame</title>
+    </head>
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+        <script>
+            function getCookie(cname) {
+                let name = cname + "=";
+                let decodedCookie = decodeURIComponent(document.cookie);
+                let ca = decodedCookie.split(';');
+                for(let i = 0; i <ca.length; i++) {
+                    let c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                    }
+                }
+                return "";
+            }
+            window.addEventListener('message', (event) => {
+                const allowedOrigins = [
+                    'http://localhost:3000',
+                    'http://localhost:4000',
+                    'https://softbaker.com',
+                    /\.softbaker\.com$/,
+                ];
+
+                const allowedOriginsForJsCookie = [
+                    'localhost',
+                    '.softbaker.com'
+                ];
+
+                if(event.origin == location.origin) return
+                // Verify the origin of the message for security
+                if (!allowedOrigins.some(origin => {
+                    if (origin instanceof RegExp) {
+                        return origin.test(event.origin);
+                    } else {
+                        return origin === event.origin;
+                    }
+                })) {
+                    console.error('Invalid origin:', event.origin, location.origin, event.data);
+                    return;
+                }
+
+                // Process the message data sent from the parent
+                const { transactionKey, key, value, storageType } = event.data;
+
+                try {
+                    // Validate storageType (assuming it is either "cookie" or "localStorage")
+                    if (storageType === 'cookie') {
+                        if(value !== undefined) {
+                            if(value.length > 0) {
+                                // If value is set, this implies writing of storage value. So set the value.
+                                for(const domain of allowedOriginsForJsCookie) {
+                                    document.cookie= `${key}=${value};Domain=${domain}; path=/; SameSite=None; Secure`;
+                                    //Cookies.set(key, value, { domain: domain,  });
+                                }
+                                window.parent.postMessage({ transactionKey, type: "write", key, value, storageType }, event.origin);
+
+                            } else {
+                                for(const domain of allowedOriginsForJsCookie) {
+                                    Cookies.remove(key, { domain: domain });
+                                }
+                                window.parent.postMessage({ transactionKey, type: "remove", key, value, storageType }, event.origin);
+                            }
+
+                        } else {
+                            // If value is not set, this implies reading of storage value. So retrieve the previous value from the cookie
+                            var storedValue = Cookies.get(key);
+                            if(!storedValue) {
+                                console.log("StoreFrame.frame.Cookies.get.empty", key)
+                                storedValue = document.cookie
+                            }
+                            // Send the final value back to the parent
+                            window.parent.postMessage({ transactionKey, type: "read", key, value: storedValue, storageType }, event.origin);
+                        }
+                        
+                    } else if (storageType === 'localStorage') {
+                        if(value !== undefined) {
+                            if(value.length > 0) {
+                                // If value is set, this implies writing of storage value. So set the value.
+                                localStorage.setItem(key, value);
+                                window.parent.postMessage({ transactionKey, type: "write", key, value, storageType }, event.origin);
+
+                            } else {
+                                localStorage.removeItem(key);
+                                window.parent.postMessage({ transactionKey, type: "remove", key, value, storageType }, event.origin);
+                            }
+
+                        } else {
+                            // If value is not set, this implies reading of storage value. So retrieve the previous value from the cookie
+                            const storedValue = localStorage.getItem(key);
+                            // Send the final value back to the parent
+                            window.parent.postMessage({ transactionKey, type: "read", key, value: storedValue, storageType }, event.origin);
+                        }
+                    } else if (storageType === 'sessionStorage') {
+                        if(value !== undefined) {
+                            if(value.length > 0) {
+                                // If value is set, this implies writing of storage value. So set the value.
+                                sessionStorage.setItem(key, value);
+                                window.parent.postMessage({ transactionKey, type: "write", key, value, storageType }, event.origin);
+
+                            } else {
+                                // If value is set, this implies writing of storage value. So set the value.
+                                sessionStorage.getItem(key, value);
+                                window.parent.postMessage({ transactionKey, type: "remove", key, value, storageType }, event.origin);
+                            }
+
+                        } else {
+                            // If value is not set, this implies reading of storage value. So retrieve the previous value from the cookie
+                            const storedValue = sessionStorage.getItem(key);
+                            // Send the final value back to the parent
+                            window.parent.postMessage({ transactionKey, type: "read", key, value: storedValue, storageType }, event.origin);
+                        }
+                    } else {
+                        window.parent.postMessage({ transactionKey, type: "error", errorMessage: "Invalid storage type", key, value: storedValue, storageType }, event.origin);
+                    }
+
+                } catch(e) {
+                    window.parent.postMessage({ transactionKey, type: "error", errorMessage: e.message, key, value: storedValue, storageType }, event.origin);
+                }
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,104 @@
+{
+  "name": "softbaker-svg",
+  "version": "5.0.1",
+  "description": "softbaker svg renderer",
+  "types": "dist/main.d.ts",
+  "type": "module",
+  "bin.disable": {
+    "softbaker-svg": "dist/bin/cli.cjs"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/main.d.ts",
+        "default": "./dist/main.mjs"
+      },
+      "require": {
+        "types": "./dist/main.d.cts",
+        "default": "./dist/main.cjs"
+      },
+      "default": "./dist/main.mjs"
+    },
+    "./dist/*": {
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.mjs",
+      "require": "./dist/*.cjs"
+    }
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "packageManager": "npm@8.4.0",
+  "files": [
+    "dist",
+    "src",
+    "bin"
+  ],
+  "scripts": {
+    "build": "tsc && tsup",
+    "s": "node dist/bin/cli.cjs",
+    "t": "npm run build && npm run s",
+    "lint": "eslint . && npm run lint:lockfile",
+    "lint:fix": "eslint . --fix",
+    "lint:lockfile": "lockfile-lint --path package-lock.json --validate-https --allowed-hosts npm yarn",
+    "test": "c8 node --loader ts-node/esm --test __tests__/**",
+    "test:watch": "c8 node --loader ts-node/esm --test --watch __tests__/**",
+    "coverage:view": "open coverage/lcov-report/index.html",
+    "version": "changeset version",
+    "release": "changeset publish"
+  },
+  "author": {
+    "name": "feyi-tech",
+    "email": "jinminetics@gmail.com",
+    "url": "https://github.com/feyi-tech"
+  },
+  "publishConfig": {
+    "provenance": false,
+    "access": "public"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    ""
+  ],
+  "homepage": "https://github.com/feyi-tech/softbaker-svg",
+  "bugs": {
+    "url": "https://github.com/feyi-tech/softbaker-svg/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/feyi-tech/softbaker-svg.git"
+  },
+  "devDependencies": {
+    "@changesets/changelog-github": "^0.5.0",
+    "@changesets/cli": "^2.27.7",
+    "@types/jsdom": "^21.1.7",
+    "@types/node": "^20.14.10",
+    "c8": "^10.1.2",
+    "eslint": "^9.6.0",
+    "eslint-plugin-security": "^3.0.1",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.7",
+    "lockfile-lint": "^4.14.0",
+    "neostandard": "^0.11.0",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.1.0",
+    "typescript": "^5.5.3",
+    "validate-conventional-commit": "^1.0.4"
+  },
+  "peerDependencies": {
+    "firebase": ">=8.0.0"
+  },
+  "lint-staged": {
+    "**/*.{js,json}": [
+      "npm run lint:fix"
+    ]
+  },
+  "dependencies": {
+    "@types/firebase": "^3.2.1",
+    "axios": "^1.9.0",
+    "canvas": "^3.1.0",
+    "jsdom": "^26.0.0",
+    "jspdf": "^2.5.1",
+    "svgson": "^5.3.1"
+  }
+}

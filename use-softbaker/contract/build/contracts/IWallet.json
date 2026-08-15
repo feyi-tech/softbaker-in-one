@@ -1,0 +1,172 @@
+{
+  "contractName": "IWallet",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "initialize",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "claimEth",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.0+commit.c7dfd78e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"claimEth\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/IWallet.sol\":\"IWallet\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/IWallet.sol\":{\"keccak256\":\"0x2ca292db4589f86d86809104070a174bf839e040f51560a051cec8c58bdc621f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://14ca5822a373dd58aa9651e2a73fc0dcf27dc8a92480c505ade394f254278dc7\",\"dweb:/ipfs/QmYbQgYQnvr8wC7PSXye1cj5ib35SWbVbnJpoLnmpwdvkj\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "// SPDX-License-Identifier: MIT\r\npragma solidity 0.8.0;\r\n\r\ninterface IWallet {\r\n    function initialize() external;\r\n    function claimEth() external returns(bool);\r\n}",
+  "sourcePath": "D:\\cyberockvalley\\WEB_DEV\\nextjs\\softbaker\\use-softbaker\\contract\\contracts\\IWallet.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/IWallet.sol",
+    "exportedSymbols": {
+      "IWallet": [
+        1057
+      ]
+    },
+    "id": 1058,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1048,
+        "literals": [
+          "solidity",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:22:2"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "id": 1057,
+        "linearizedBaseContracts": [
+          1057
+        ],
+        "name": "IWallet",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "functionSelector": "8129fc1c",
+            "id": 1051,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "initialize",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1049,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "103:2:2"
+            },
+            "returnParameters": {
+              "id": 1050,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "114:0:2"
+            },
+            "scope": 1057,
+            "src": "84:31:2",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "b7cdddcb",
+            "id": 1056,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "claimEth",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1052,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "138:2:2"
+            },
+            "returnParameters": {
+              "id": 1055,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1054,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1056,
+                  "src": "158:4:2",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 1053,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "158:4:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "157:6:2"
+            },
+            "scope": 1057,
+            "src": "121:43:2",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 1058,
+        "src": "59:108:2"
+      }
+    ],
+    "src": "33:134:2"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.0+commit.c7dfd78e.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.16",
+  "updatedAt": "2024-10-29T03:38:34.729Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}

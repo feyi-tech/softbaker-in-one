@@ -1,0 +1,74 @@
+[
+	{
+		"0": "0x6503bADE30dA776707B6E12CeD4229c56C02042c",
+		"1": true,
+		"2": "12899851820000000000",
+		"__length__": 3,
+		"wallet": "0x6503bADE30dA776707B6E12CeD4229c56C02042c",
+		"isCreated": true,
+		"balance": "12899851820000000000",
+		"salt": "mLdXDQ7T7jZuwPoHSDP5ZZcOZT93",
+		"paddedSalt": "0x6d6c647864713774376a7a7577706f68736470357a7a636f7a74393300000000",
+		"email": "adenikeoreofe14@gmail.com"
+	},
+	{
+		"0": "0x05DdA20925B792B8491d69ABc4720a9Bc0dd651e",
+		"1": true,
+		"2": "95868330000000000",
+		"__length__": 3,
+		"wallet": "0x05DdA20925B792B8491d69ABc4720a9Bc0dd651e",
+		"isCreated": true,
+		"balance": "95868330000000000",
+		"salt": "bjibAHMk3dfJ1aIVQ3pxHBzszQj1",
+		"paddedSalt": "0x626a696261686d6b3364666a316169767133707868627a737a716a3100000000",
+		"email": "h28385549@gmail.com"
+	},
+	{
+		"0": "0x99EC31F8ddCcd8b1e75FFe6052648b705804a0DF",
+		"1": true,
+		"2": "654025270000000000",
+		"__length__": 3,
+		"wallet": "0x99EC31F8ddCcd8b1e75FFe6052648b705804a0DF",
+		"isCreated": true,
+		"balance": "654025270000000000",
+		"salt": "Bb9cg9ZAEKdS8zpzBY26pfbkqSn1",
+		"paddedSalt": "0x6262396367397a61656b6473387a707a627932367066626b71736e3100000000",
+		"email": "phillipsoyebola@yahoo.com"
+	},
+	{
+		"0": "0x4c53e2CC585318a08c966EF2e6bf2B67F6Ad3970",
+		"1": false,
+		"2": "108006160000000000",
+		"__length__": 3,
+		"wallet": "0x4c53e2CC585318a08c966EF2e6bf2B67F6Ad3970",
+		"isCreated": false,
+		"balance": "108006160000000000",
+		"salt": "E0PWQQixX2VmdFGnOZc6VZ2jXDN2",
+		"paddedSalt": "0x65307077717169787832766d6466676e6f7a6336767a326a78646e3200000000",
+		"email": "adefarayoladammy17@gmail.com"
+	},
+	{
+		"0": "0x8bC33b5A70f5D49d01928c200b290Db0030a6677",
+		"1": true,
+		"2": "1009741720000000000",
+		"__length__": 3,
+		"wallet": "0x8bC33b5A70f5D49d01928c200b290Db0030a6677",
+		"isCreated": true,
+		"balance": "1009741720000000000",
+		"salt": "VUsCug2GJxNL5aaE9J8F4Y9SE8m1",
+		"paddedSalt": "0x76757363756732676a786e6c35616165396a38663479397365386d3100000000",
+		"email": "kellychristiana100@gmail.com"
+	},
+	{
+		"0": "0x246ea8f57ED6F3F99BA99CcbF333d32631aEe058",
+		"1": true,
+		"2": "107335000000000000",
+		"__length__": 3,
+		"wallet": "0x246ea8f57ED6F3F99BA99CcbF333d32631aEe058",
+		"isCreated": true,
+		"balance": "107335000000000000",
+		"salt": "aoA3dBRQfvVbGztZorPw8t1zr2q2",
+		"paddedSalt": "0x616f61336462727166767662677a747a6f7270773874317a7232713200000000",
+		"email": ""
+	}
+]

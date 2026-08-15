@@ -1,0 +1,469 @@
+{
+   "rpcUrl": "https://bsc-dataseed1.binance.org",
+   "chainId": 56,
+   "address": "0xEa0bbEff016581A38c1dfdcd255731F221B0aA27",
+   "timestamp": "1/29/2024, 11:23:16 PM",
+   "network": "Bsc",
+   "contractName": "WalletFactory",
+   "abi": [
+      {
+         "inputs": [
+            {
+               "internalType": "address",
+               "name": "walletCreator",
+               "type": "address"
+            }
+         ],
+         "stateMutability": "nonpayable",
+         "type": "constructor"
+      },
+      {
+         "anonymous": false,
+         "inputs": [
+            {
+               "indexed": true,
+               "internalType": "address",
+               "name": "executor",
+               "type": "address"
+            },
+            {
+               "indexed": false,
+               "internalType": "uint256",
+               "name": "amount",
+               "type": "uint256"
+            }
+         ],
+         "name": "FeesReturned",
+         "type": "event"
+      },
+      {
+         "anonymous": false,
+         "inputs": [
+            {
+               "indexed": true,
+               "internalType": "address",
+               "name": "from",
+               "type": "address"
+            },
+            {
+               "indexed": true,
+               "internalType": "address",
+               "name": "toWallet",
+               "type": "address"
+            },
+            {
+               "indexed": false,
+               "internalType": "uint256",
+               "name": "amount",
+               "type": "uint256"
+            }
+         ],
+         "name": "Transfer",
+         "type": "event"
+      },
+      {
+         "anonymous": false,
+         "inputs": [
+            {
+               "indexed": true,
+               "internalType": "bytes32",
+               "name": "salt",
+               "type": "bytes32"
+            },
+            {
+               "indexed": true,
+               "internalType": "address",
+               "name": "wallet",
+               "type": "address"
+            }
+         ],
+         "name": "WalletCreated",
+         "type": "event"
+      },
+      {
+         "inputs": [
+            {
+               "internalType": "address",
+               "name": "",
+               "type": "address"
+            }
+         ],
+         "name": "isWalletCreator",
+         "outputs": [
+            {
+               "internalType": "bool",
+               "name": "",
+               "type": "bool"
+            }
+         ],
+         "stateMutability": "view",
+         "type": "function",
+         "constant": true
+      },
+      {
+         "inputs": [],
+         "name": "owner",
+         "outputs": [
+            {
+               "internalType": "address",
+               "name": "",
+               "type": "address"
+            }
+         ],
+         "stateMutability": "view",
+         "type": "function",
+         "constant": true
+      },
+      {
+         "inputs": [
+            {
+               "internalType": "bytes32",
+               "name": "",
+               "type": "bytes32"
+            }
+         ],
+         "name": "saltToWallet",
+         "outputs": [
+            {
+               "internalType": "address",
+               "name": "",
+               "type": "address"
+            }
+         ],
+         "stateMutability": "view",
+         "type": "function",
+         "constant": true
+      },
+      {
+         "inputs": [
+            {
+               "internalType": "address",
+               "name": "",
+               "type": "address"
+            }
+         ],
+         "name": "walletCreated",
+         "outputs": [
+            {
+               "internalType": "bool",
+               "name": "",
+               "type": "bool"
+            }
+         ],
+         "stateMutability": "view",
+         "type": "function",
+         "constant": true
+      },
+      {
+         "inputs": [
+            {
+               "internalType": "uint256",
+               "name": "",
+               "type": "uint256"
+            }
+         ],
+         "name": "walletCreators",
+         "outputs": [
+            {
+               "internalType": "address",
+               "name": "",
+               "type": "address"
+            }
+         ],
+         "stateMutability": "view",
+         "type": "function",
+         "constant": true
+      },
+      {
+         "inputs": [
+            {
+               "internalType": "address",
+               "name": "",
+               "type": "address"
+            }
+         ],
+         "name": "walletToDeposits",
+         "outputs": [
+            {
+               "internalType": "uint256",
+               "name": "",
+               "type": "uint256"
+            }
+         ],
+         "stateMutability": "view",
+         "type": "function",
+         "constant": true
+      },
+      {
+         "inputs": [
+            {
+               "internalType": "address",
+               "name": "",
+               "type": "address"
+            }
+         ],
+         "name": "walletToSalt",
+         "outputs": [
+            {
+               "internalType": "bytes32",
+               "name": "",
+               "type": "bytes32"
+            }
+         ],
+         "stateMutability": "view",
+         "type": "function",
+         "constant": true
+      },
+      {
+         "inputs": [
+            {
+               "internalType": "uint256",
+               "name": "",
+               "type": "uint256"
+            }
+         ],
+         "name": "wallets",
+         "outputs": [
+            {
+               "internalType": "address",
+               "name": "",
+               "type": "address"
+            }
+         ],
+         "stateMutability": "view",
+         "type": "function",
+         "constant": true
+      },
+      {
+         "inputs": [
+            {
+               "internalType": "address",
+               "name": "from",
+               "type": "address"
+            }
+         ],
+         "name": "receiveFunds",
+         "outputs": [],
+         "stateMutability": "payable",
+         "type": "function",
+         "payable": true
+      },
+      {
+         "inputs": [
+            {
+               "internalType": "address",
+               "name": "newOwner",
+               "type": "address"
+            }
+         ],
+         "name": "changeOwner",
+         "outputs": [],
+         "stateMutability": "nonpayable",
+         "type": "function"
+      },
+      {
+         "inputs": [
+            {
+               "internalType": "address",
+               "name": "newWalletCreator",
+               "type": "address"
+            }
+         ],
+         "name": "addWalletCreator",
+         "outputs": [],
+         "stateMutability": "nonpayable",
+         "type": "function"
+      },
+      {
+         "inputs": [
+            {
+               "internalType": "address",
+               "name": "walletCreatorToRemove",
+               "type": "address"
+            }
+         ],
+         "name": "removeWalletCreator",
+         "outputs": [],
+         "stateMutability": "nonpayable",
+         "type": "function"
+      },
+      {
+         "inputs": [
+            {
+               "internalType": "bytes32[]",
+               "name": "salts",
+               "type": "bytes32[]"
+            },
+            {
+               "internalType": "uint256",
+               "name": "gasFeeReturn",
+               "type": "uint256"
+            }
+         ],
+         "name": "createWallets",
+         "outputs": [],
+         "stateMutability": "nonpayable",
+         "type": "function"
+      },
+      {
+         "inputs": [
+            {
+               "internalType": "uint256",
+               "name": "txFee",
+               "type": "uint256"
+            }
+         ],
+         "name": "getTxFee",
+         "outputs": [],
+         "stateMutability": "nonpayable",
+         "type": "function"
+      },
+      {
+         "inputs": [
+            {
+               "internalType": "address[]",
+               "name": "uwallets",
+               "type": "address[]"
+            },
+            {
+               "internalType": "uint256[]",
+               "name": "amounts",
+               "type": "uint256[]"
+            }
+         ],
+         "name": "distributeEther",
+         "outputs": [],
+         "stateMutability": "nonpayable",
+         "type": "function"
+      },
+      {
+         "inputs": [
+            {
+               "internalType": "bytes32",
+               "name": "salt",
+               "type": "bytes32"
+            }
+         ],
+         "name": "getSaltAddress",
+         "outputs": [
+            {
+               "internalType": "address",
+               "name": "wallet",
+               "type": "address"
+            },
+            {
+               "internalType": "bool",
+               "name": "isCreated",
+               "type": "bool"
+            }
+         ],
+         "stateMutability": "view",
+         "type": "function",
+         "constant": true
+      },
+      {
+         "inputs": [
+            {
+               "internalType": "bytes32[]",
+               "name": "salts",
+               "type": "bytes32[]"
+            }
+         ],
+         "name": "getAllSaltsTotalBalance",
+         "outputs": [
+            {
+               "internalType": "uint256",
+               "name": "totalBalance",
+               "type": "uint256"
+            }
+         ],
+         "stateMutability": "view",
+         "type": "function",
+         "constant": true
+      },
+      {
+         "inputs": [
+            {
+               "internalType": "bytes32[]",
+               "name": "salts",
+               "type": "bytes32[]"
+            }
+         ],
+         "name": "getCreatedSaltsTotalBalance",
+         "outputs": [
+            {
+               "internalType": "uint256",
+               "name": "totalBalance",
+               "type": "uint256"
+            }
+         ],
+         "stateMutability": "view",
+         "type": "function",
+         "constant": true
+      },
+      {
+         "inputs": [
+            {
+               "internalType": "bytes32[]",
+               "name": "salts",
+               "type": "bytes32[]"
+            }
+         ],
+         "name": "getNonCreatedSaltsTotalBalance",
+         "outputs": [
+            {
+               "internalType": "uint256",
+               "name": "totalBalance",
+               "type": "uint256"
+            }
+         ],
+         "stateMutability": "view",
+         "type": "function",
+         "constant": true
+      },
+      {
+         "inputs": [],
+         "name": "walletsCount",
+         "outputs": [
+            {
+               "internalType": "uint256",
+               "name": "",
+               "type": "uint256"
+            }
+         ],
+         "stateMutability": "view",
+         "type": "function",
+         "constant": true
+      },
+      {
+         "inputs": [
+            {
+               "internalType": "bytes32",
+               "name": "salt",
+               "type": "bytes32"
+            }
+         ],
+         "name": "getSaltBalance",
+         "outputs": [
+            {
+               "internalType": "address",
+               "name": "wallet",
+               "type": "address"
+            },
+            {
+               "internalType": "bool",
+               "name": "isCreated",
+               "type": "bool"
+            },
+            {
+               "internalType": "uint256",
+               "name": "balance",
+               "type": "uint256"
+            }
+         ],
+         "stateMutability": "view",
+         "type": "function",
+         "constant": true
+      }
+   ]
+}

@@ -1,0 +1,39 @@
+{
+   "rpcUrl": "https://data-seed-prebsc-2-s2.binance.org:8545",
+   "chainId": 97,
+   "address": "0x2a0f7EAb9Da5092CF598a0854994312A6d38cd75",
+   "timestamp": "1/29/2024, 11:00:06 PM",
+   "network": "Testnet",
+   "contractName": "Wallet",
+   "abi": [
+      {
+         "inputs": [],
+         "stateMutability": "nonpayable",
+         "type": "constructor"
+      },
+      {
+         "inputs": [],
+         "name": "factory",
+         "outputs": [
+            {
+               "internalType": "address",
+               "name": "",
+               "type": "address"
+            }
+         ],
+         "stateMutability": "view",
+         "type": "function"
+      },
+      {
+         "stateMutability": "payable",
+         "type": "receive"
+      },
+      {
+         "inputs": [],
+         "name": "initialize",
+         "outputs": [],
+         "stateMutability": "nonpayable",
+         "type": "function"
+      }
+   ]
+}

@@ -1,0 +1,7 @@
+{
+   "WalletFactory-Testnet": "0xEa0bbEff016581A38c1dfdcd255731F221B0aA27",
+   "Wallet-Testnet": "0x2a0f7EAb9Da5092CF598a0854994312A6d38cd75",
+   "WalletFactory-Bsc": "0xEa0bbEff016581A38c1dfdcd255731F221B0aA27",
+   "Wallet-Bsc": "0x2a0f7EAb9Da5092CF598a0854994312A6d38cd75",
+   "CoinDistributorWithLocker-Bsc": "0x26a34aaD44A7ce826dc6B34e0EfE24D2910f9C68"
+}
