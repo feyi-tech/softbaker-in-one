@@ -595,6 +595,40 @@ const calculateElementId = (element: INode, elementIndex: number, allElements: I
   return occlusionIdList
 }
 
+const parseSvgLength = (value?: string | number | null): number | null => {
+    if(value === null || value === undefined) return null
+    const text = `${value}`.trim()
+    if(text.endsWith("%")) return null
+    const parsed = parseFloat(text)
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : null
+}
+
+const parseSvgViewBoxSize = (viewBox?: string | null): { width: number, height: number } | null => {
+    if(!viewBox) return null
+    const values = viewBox.trim().split(/[\s,]+/).map(value => parseFloat(value))
+    if(values.length !== 4 || values.some(value => !Number.isFinite(value))) return null
+
+    const width = values[2]
+    const height = values[3]
+    return width > 0 && height > 0 ? { width, height } : null
+}
+
+const getTemplateSvgSize = (attributes: Record<string, string>): { width: number, height: number } | null => {
+    const width = parseSvgLength(attributes.width)
+    const height = parseSvgLength(attributes.height)
+    const viewBoxSize = parseSvgViewBoxSize(attributes.viewBox)
+
+    if(width && height) return { width, height }
+
+    if(viewBoxSize) {
+        if(width) return { width, height: (width / viewBoxSize.width) * viewBoxSize.height }
+        if(height) return { width: (height / viewBoxSize.height) * viewBoxSize.width, height }
+        return viewBoxSize
+    }
+
+    return null
+}
+
 export const getSvg = (
     storageHost: string,
     data: FieldsData, templateData: TemplateData, fonts?: FontsMap | null, showWatermark?: boolean | null, 
@@ -609,10 +643,19 @@ export const getSvg = (
       parse(templateData.svg)
       .then(async parsedSvg => {
             const fieldsKeys = Object.keys(templateData.fields)
-            const templateWidth = Number(`${parsedSvg.attributes.width || 0}`)
-            const templateHeight = Number(`${parsedSvg.attributes.height || 0}`)
+            const templateSize = getTemplateSvgSize(parsedSvg.attributes)
+            if(!templateSize) {
+                throw new Error("Invalid SVG template dimensions.")
+            }
 
-            var preferedWidth = !width || width == "max"? templateWidth : width
+            const templateWidth = templateSize.width
+            const templateHeight = templateSize.height
+
+            const parsedPreferedWidth = !width || width == "max"? templateWidth : parseSvgLength(width)
+            if(!parsedPreferedWidth) {
+                throw new Error("Invalid SVG render width.")
+            }
+            const preferedWidth: number = parsedPreferedWidth
             //if(preferedWidth && preferedWidth > 728 && !isHighQuality) preferedWidth = 728
 
             const preferedHeight = ((preferedWidth / templateWidth) * templateHeight)

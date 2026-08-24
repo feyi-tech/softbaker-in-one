@@ -1,6 +1,6 @@
 {
   "name": "softbaker-svg",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "softbaker svg renderer",
   "types": "dist/main.d.ts",
   "type": "module",

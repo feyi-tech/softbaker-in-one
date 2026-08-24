@@ -1,4 +1,5 @@
-//const path = require('path');
+const fs = require('fs');
+const path = require('path');
 //const dotenv = require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 //console.log("dotenv", dotenv)
 const functions = require('firebase-functions');
@@ -10,7 +11,6 @@ const cors = require('cors');
 const admin = require('firebase-admin');
 const FieldValue = require('firebase-admin').firestore.FieldValue;
 const Web3 = require("web3").default;
-const serviceAccount = require("./serviceAccountKey.json");
 const WalletFactory = require('./WalletFactory');
 const { COINS, PRICE_DATA_TTL_MINUTES, REF_PCT, MAX_BIG_INT_STRING_DIGITS, MAX_RISKY_OPERATION_LOGIN_AGE_IN_SECONDS, DOLLAR_MARKET_PRICE_SHIFT_FILL, MAX_IMAGES_UPLOAD_SIZE } = require('./utils/c');
 const { isEthAddress } = require('./utils/f');
@@ -41,6 +41,17 @@ const nullOrEmpty = (data) => {
   !data || data.length == 0
 }
 
+const getTemplateDownloadSides = (template) => {
+  if (template?.split_on_download) return ["front", "back"];
+  if (template?.split_on_download_hr) return ["front_hr", "back_hr"];
+  return [];
+}
+
+const getTemplateDownloadSide = (template, selectedSide) => {
+  const sides = getTemplateDownloadSides(template);
+  return sides.includes(selectedSide) ? selectedSide : undefined;
+}
+
 //console.log = () => { }
 const getFirebaseTimestamp = (value) => {
   try {
@@ -64,10 +75,25 @@ const readServerCoinBalanceInCoin = (coin, balanceDoc) => {
   return balance;
 }
 
+const getAdminAppOptions = () => {
+  const serviceAccountPath = path.resolve(__dirname, "serviceAccountKey.json");
+
+  if (!fs.existsSync(serviceAccountPath)) return undefined;
+
+  return {
+    credential: admin.credential.cert(require(serviceAccountPath))
+  };
+}
+
 const initAdminFinal = () => {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-  });
+  const options = getAdminAppOptions();
+
+  if (options) {
+    admin.initializeApp(options);
+    return;
+  }
+
+  admin.initializeApp();
 }
 
 const initAdmin = () => {
@@ -1942,8 +1968,7 @@ app.post('/download_svg_result', authenticateFirebaseUser, async (req, res) => {
       })
     }
 
-    const side = splits && selectedSide ? selectedSide : template.split_on_download? "front" : template.split_on_download_hr? "front_hr" : undefined
-    //const side = (template?.split_on_download || template?.split_on_download_hr) && selectedSide? selectedSide : undefined
+    const side = getTemplateDownloadSide(template, selectedSide)
 
     let image = await downloadSvgAsImage(
       svg, "jpeg", 

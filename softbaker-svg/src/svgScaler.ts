@@ -125,9 +125,9 @@ export function responsivePathD(d: string, widthScaler: (value: number) => numbe
 
 export function responsiveViewBox(viewBox: string, widthScaler: (value: number) => number, heightScaler: (value: number) => number) {
     // Split the viewBox values (min-x, min-y, width, height) by spaces
-    let viewBoxValues = viewBox.trim().split(' ').map((v: string) => parseFloat(v));
+    let viewBoxValues = viewBox.trim().split(/[\s,]+/).map((v: string) => parseFloat(v));
   
-    if (viewBoxValues.length !== 4) {
+    if (viewBoxValues.length !== 4 || viewBoxValues.some(value => !Number.isFinite(value))) {
       throw new Error("Invalid viewBox format. Expected format: 'min-x min-y width height'");
     }
   

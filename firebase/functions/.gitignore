@@ -1,4 +1,7 @@
 node_modules/
 ignores/
+.env
+.env.*
+!.env.example
 *.local
 serviceAccountKey.json

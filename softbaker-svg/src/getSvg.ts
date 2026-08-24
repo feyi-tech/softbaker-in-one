@@ -101,39 +101,86 @@ const getNodeImageDimensionAttr = (img: any, attr: string) => {
   }
 }
 
+const parseSvgLength = (value?: string | number | null): number | null => {
+  if(value === null || value === undefined) return null
+  const text = `${value}`.trim()
+  if(text.endsWith("%")) return null
+  const parsed = parseFloat(text)
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : null
+}
+
+const getSvgTagAttribute = (svgString: string, attr: string): string | null => {
+  const svgTag = svgString.match(/<svg\b[^>]*>/i)?.[0]
+  if(!svgTag) return null
+  const attrMatch = svgTag.match(new RegExp(`(?:^|\\s)${attr}\\s*=\\s*["']([^"']+)["']`, "i"))
+  return attrMatch?.[1] || null
+}
+
+const parseSvgViewBox = (viewBox?: string | null): { width: number, height: number } | null => {
+  if(!viewBox) return null
+  const values = viewBox.trim().split(/[\s,]+/).map(value => parseFloat(value))
+  if(values.length !== 4 || values.some(value => !Number.isFinite(value))) return null
+
+  const width = values[2]
+  const height = values[3]
+  return width > 0 && height > 0 ? { width, height } : null
+}
+
+const getSvgIntrinsicSize = (svgString: string): { width: number, height: number } | null => {
+  const width = parseSvgLength(getSvgTagAttribute(svgString, "width"))
+  const height = parseSvgLength(getSvgTagAttribute(svgString, "height"))
+  const viewBoxSize = parseSvgViewBox(getSvgTagAttribute(svgString, "viewBox"))
+
+  if(width && height) return { width, height }
+
+  if(viewBoxSize) {
+    if(width) return { width, height: (width / viewBoxSize.width) * viewBoxSize.height }
+    if(height) return { width: (height / viewBoxSize.height) * viewBoxSize.width, height }
+    return viewBoxSize
+  }
+
+  return null
+}
+
 async function processBase64Image(base64Image: string, side?: "front" | "back" | "front_hr" | "back_hr", format: 'png' | 'jpeg' | 'pdf' | string = 'png'): Promise<string> {
   return new Promise((resolve, reject) => {
       const img = new Image();
       img.onload = () => {
-          const canvas = getCanvas(img.width, img.height);
+          const sourceWidth = (img as any).naturalWidth || img.width
+          const sourceHeight = (img as any).naturalHeight || img.height
+          if (!sourceWidth || !sourceHeight) return reject(new Error("Invalid image dimensions"));
+
+          const canvas = getCanvas(sourceWidth, sourceHeight);
           const ctx = canvas.getContext("2d") as any;
           if (!ctx) return reject("Canvas context not supported");
           
-          let sx = 0, sy = 0, sw = img.width, sh = img.height;
+          let sx = 0, sy = 0, sw = sourceWidth, sh = sourceHeight;
 
           switch (side) {
               case "front":
-                  sw = img.width / 2; // Left half
+                  sw = sourceWidth / 2; // Left half
                   break;
               case "back":
-                  sx = img.width / 2; // Right half
-                  sw = img.width / 2;
+                  sx = sourceWidth / 2; // Right half
+                  sw = sourceWidth / 2;
                   break;
               case "front_hr":
-                  sh = img.height / 2; // Top half
+                  sh = sourceHeight / 2; // Top half
                   break;
               case "back_hr":
-                  sy = img.height / 2; // Bottom half
-                  sh = img.height / 2;
+                  sy = sourceHeight / 2; // Bottom half
+                  sh = sourceHeight / 2;
                   break;
               default:
                   return resolve(base64Image); // Return original if side is undefined
           }
 
-          canvas.width = sw;
-          canvas.height = sh;
+          const outputWidth = Math.max(1, Math.round(sw))
+          const outputHeight = Math.max(1, Math.round(sh))
+          canvas.width = outputWidth;
+          canvas.height = outputHeight;
           const realImage = ((img as any) as ImageWrapper).realImage? ((img as any) as ImageWrapper).realImage : img
-          ctx.drawImage(realImage, sx, sy, sw, sh, 0, 0, sw, sh);
+          ctx.drawImage(realImage, sx, sy, sw, sh, 0, 0, outputWidth, outputHeight);
           resolve(canvas.toDataURL(`image/${format === 'pdf' ? 'png' : format}`));
       };
       img.onerror = () => reject("Image loading error");
@@ -168,17 +215,26 @@ export const downloadSvgAsImage = (
       
       img.onload = async function () {
         //console.error("downloadSvgAsImage.onload", img.width, img.height)
+        const svgSize = getSvgIntrinsicSize(svgString)
+        const imageWidth = (img as any).naturalWidth || img.width || svgSize?.width || 0
+        const imageHeight = (img as any).naturalHeight || img.height || svgSize?.height || 0
+
+        if(!Number.isFinite(imageWidth) || !Number.isFinite(imageHeight) || imageWidth <= 0 || imageHeight <= 0) {
+          reject(new Error("Invalid SVG dimensions."));
+          return;
+        }
+
         // Limit canvas size to avoid crashes
         const MAX_DIMENSION = 4096;
-        const scaleFactor = Math.min(1, MAX_DIMENSION / Math.max(img.width, img.height));
+        const scaleFactor = Math.min(1, MAX_DIMENSION / Math.max(imageWidth, imageHeight));
+
+        let canvasWidth = Math.max(1, Math.round(imageWidth * scaleFactor));
+        let canvasHeight = Math.max(1, Math.round(imageHeight * scaleFactor));
 
         // Create canvas
-        const canvas = getCanvas(img.width * scaleFactor, img.height * scaleFactor);
+        const canvas = getCanvas(canvasWidth, canvasHeight);
         //const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d') as any;
-
-        let canvasWidth = img.width * scaleFactor;
-        let canvasHeight = img.height * scaleFactor;
 
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;

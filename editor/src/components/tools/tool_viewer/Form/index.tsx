@@ -62,6 +62,12 @@ const getDirectivesValues = (data?: FieldsData | null, fields?: Fields): string[
     return directivesValues
 }
 
+const getTemplateDownloadSides = (template?: any | null): Array<"front" | "back" | "front_hr" | "back_hr"> => {
+    if(template?.split_on_download) return ["front", "back"]
+    if(template?.split_on_download_hr) return ["front_hr", "back_hr"]
+    return []
+}
+
 function parseTextToObject(inputText: string) {
     const lines: string[] = inputText.split('\n'); // Split the input by lines
     const result: {[x: string]: any} = {};
@@ -146,14 +152,13 @@ const Form: React.FC<FormType> = ({
     const [ selectedSide, setSelectedSide ] = useState<"front" | "back" | "front_hr" | "back_hr">()
 
     useEffect(() => {
-        if(selectedTemplate?.split_on_download && !selectedSide) {
-            setSelectedSide("front")
-
-        } else if(selectedTemplate?.split_on_download_hr && !selectedSide) {
-            setSelectedSide("front_hr")
+        const sides = getTemplateDownloadSides(selectedTemplate)
+        const nextSide = sides.includes(selectedSide as any)? selectedSide : sides[0]
+        if(nextSide !== selectedSide) {
+            setSelectedSide(nextSide)
         }
 
-    }, [selectedTemplate?.split_on_download, selectedTemplate?.split_on_download_hr])
+    }, [selectedTemplate?.id, selectedTemplate?.split_on_download, selectedTemplate?.split_on_download_hr, selectedSide])
     
     const onSetDefault = (fieldsData: FieldsData) => {
         if(isNew && initData) {
@@ -237,6 +242,7 @@ const Form: React.FC<FormType> = ({
         const splits = (selectedTemplate?.split_on_download || selectedTemplate?.split_on_download_hr) === true
         highQuality = highQuality && !data.is_freemium
         const size = highQuality? (splits? 2048 : 1024) : splits? 1024 : 728
+        const downloadSide = getTemplateDownloadSides(selectedTemplate).includes(selectedSide as any)? selectedSide : undefined
         //const size = highQuality? ((selectedTemplate?.split_on_download || selectedTemplate?.split_on_download_hr) === true && !data.is_freemium? 2048 : 1024) : 728
         //console.log("Size: ", size, selectedTemplate?.split_on_download === true, !data.is_freemium)
         
@@ -253,7 +259,7 @@ const Form: React.FC<FormType> = ({
             downloadSvgAsImage(
                 svg, format, 
                 `${textToFilename(`${tool?.name || "item"}-${getDirectivesValues(data, selectedTemplateData?.fields).join("_")}`)}-${(new Date()).toISOString()}`,
-                (selectedTemplate?.split_on_download || selectedTemplate?.split_on_download_hr) && selectedSide? selectedSide : undefined
+                downloadSide
             )
             .then(base64ImageUrl => {
                 //console.log("formatDate.SVG2:2")
@@ -280,7 +286,7 @@ const Form: React.FC<FormType> = ({
             SvgRenderer.downloadSvgResultFromServer(
                 user, data, format, "other_tools_data", 
                 `${textToFilename(`${tool?.name || "item"}-${getDirectivesValues(data, selectedTemplateData?.fields).join("_")}`)}-${(new Date()).toISOString()}`,
-                (selectedTemplate?.split_on_download || selectedTemplate?.split_on_download_hr) && selectedSide? selectedSide : undefined, 
+                downloadSide,
                 size
             )
             .then(result => {
