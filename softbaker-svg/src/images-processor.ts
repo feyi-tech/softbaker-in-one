@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getCanvas } from "./imageHelper.ts";
 import { FileMap, MaskMap } from "./types.ts";
-import { isUploadedFileUrl, setR2Host } from "./utils.ts";
+import { getCorsSafeR2Url, isUploadedFileUrl } from "./utils.ts";
 import { normalizeMimeType } from "./mime.ts";
 
 const isNode = typeof window === 'undefined';
@@ -19,7 +19,7 @@ export const fetchImageForBase64 = async (
   if (!isUploadedFileUrl(url)) return url;
 
   try {
-    const response = await axios.get(setR2Host(url, storageHost), {
+    const response = await axios.get(getCorsSafeR2Url(url, storageHost), {
       responseType: "arraybuffer", // Fetch raw bytes
     });
 

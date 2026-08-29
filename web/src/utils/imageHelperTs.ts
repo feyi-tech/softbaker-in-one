@@ -1,7 +1,8 @@
+import { normalizeMimeType } from "./r2";
+
 const normalizeImageMimeType = (format?: string | null): string => {
-  if (!format) return 'image/png';
-  const imageFormat = format.startsWith('image/') ? format : `image/${format}`;
-  return imageFormat === 'image/jpg' ? 'image/jpeg' : imageFormat;
+  const normalized = normalizeMimeType(format, 'image/png');
+  return normalized.startsWith('image/') ? normalized : `image/${normalized}`;
 }
 
 export const resizeImage = async (file: File, maxFileSizeInBytes: number, format?: string | null, quality?: number | null) => {

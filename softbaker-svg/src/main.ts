@@ -11,6 +11,7 @@ import {
     breakName, showField, splitSvgElementId, useDataForRandSeed, valueOfParseValue, actionsStorageKey, fileFieldStorageKey,
     fileDocStorageKey, fileCollectionStorageKey, isBrowser, saveFileFieldFile, getFileFieldFile, moveFileFieldFile, 
     deleteFileFieldFile, deleteDataWithKeyPrefix, arrayToMap, isTheSameUrl, expandImagesMap, setR2Host,
+    getCorsSafeR2Url,
     FileFieldsFiles
 } from "./utils.ts"
 import { 
@@ -90,7 +91,7 @@ export {
 }
 
 export { 
-    base64ToImage, analyzeImage, isTheSameUrl, expandImagesMap, setR2Host
+    base64ToImage, analyzeImage, isTheSameUrl, expandImagesMap, setR2Host, getCorsSafeR2Url
 }
 
 export type {

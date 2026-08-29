@@ -9,6 +9,7 @@ import useColorValue from "@/root/src/hooks/useColorValue";
 import Loading from "../Loading";
 import CuteButton from "../CuteButton";
 import { USE_SOFTBAKER_CONFIG } from "@/root/src/app-config";
+import { getR2ImageCrossOrigin } from "@/root/src/utils/r2";
 
 
 interface LinkOrBox {
@@ -129,6 +130,7 @@ const ToolsGrid: React.FC<ToolsGrid> = ({ hideJumper, toolId, templateId }) => {
                                 boxSize="220px"
                                 borderRadius="md"
                                 objectFit="cover"
+                                crossOrigin={getR2ImageCrossOrigin((tool as StaticTool).siteLogoUrl)}
                             />
                             <Text fontSize="sm" fontWeight="bold" mt={2} noOfLines={1}>
                                 {tool.name}
@@ -158,6 +160,7 @@ const ToolsGrid: React.FC<ToolsGrid> = ({ hideJumper, toolId, templateId }) => {
                                     boxSize="220px"
                                     borderRadius="md"
                                     objectFit="cover"
+                                    crossOrigin={getR2ImageCrossOrigin(template.thumbnail)}
                                     />
                                     <Text fontSize="sm" fontWeight="bold" mt={2} noOfLines={1}>
                                         {template.name}

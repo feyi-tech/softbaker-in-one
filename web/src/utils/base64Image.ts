@@ -1,4 +1,6 @@
 
+import { normalizeMimeType } from "./r2";
+
   
   /**
  * Gets the dimensions (width and height) of an image from a base64 string.
@@ -75,7 +77,7 @@ export function base64UrlToFile(base64Url: string, fileName?: string, fileType?:
 
   // The data URL MIME describes the actual encoded bytes, so it must win over
   // stale metadata from an original upload.
-  fileType = dataUrlFileType || fileType || 'application/octet-stream';
+  fileType = normalizeMimeType(dataUrlFileType || fileType);
 
   // If the fileName is not provided, generate a random one with an appropriate extension
   if (!fileName) {

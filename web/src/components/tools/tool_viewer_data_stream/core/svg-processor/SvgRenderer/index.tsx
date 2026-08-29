@@ -4,7 +4,7 @@ import { Box, HStack, Text, VStack, useBreakpointValue } from "@chakra-ui/react"
 import { FaExclamationTriangle } from "react-icons/fa"
 import { useEffect, useRef, useState } from "react"
 import DocContainer from "@/root/src/components/widgets/ToolsElements/DocContainer"
-import { FieldsData, FileMap, FilterArgs, FontsMap, MaskMap, TemplateData, base64ToFile, getFileFieldFile, getImageDimension, getSvg, rotateTransformValue } from "softbaker-svg"
+import { FieldsData, FileMap, FilterArgs, FontsMap, MaskMap, TemplateData, base64ToFile, getFileFieldFile, getImageDimension, getSvg as renderSvg, setR2Host, rotateTransformValue } from "softbaker-svg"
 import { User } from "firebase/auth"
 import axios from "axios"
 import { resizeImage } from "@/root/src/utils/imageHelperTs"
@@ -30,6 +30,41 @@ const parseError = (error: any) => {
     if(error?.message) return error.message
     return error
 }
+
+const getCorsSafeTemplateAssetUrl = (storageHostname: string, url?: string | null) => {
+    if (!url || url.startsWith("data:") || url.startsWith("/") || !url.startsWith("http")) return url;
+    try {
+        const parsedUrl = new URL(setR2Host(url, storageHostname));
+        parsedUrl.searchParams.set("r2_cors", "1");
+        return parsedUrl.toString();
+    } catch {
+        return url;
+    }
+}
+
+const getCorsSafeTemplateData = (storageHostname: string, templateData: TemplateData): TemplateData => ({
+    ...templateData,
+    template: {
+        ...templateData.template,
+        logo: getCorsSafeTemplateAssetUrl(storageHostname, templateData.template.logo),
+    },
+    images: Object.fromEntries(
+        Object.entries(templateData.images || {}).map(([key, value]) => [
+            key,
+            getCorsSafeTemplateAssetUrl(storageHostname, value),
+        ])
+    ),
+});
+
+const getSvg = (
+    storageHostname: string,
+    data: FieldsData,
+    templateData: TemplateData,
+    fonts?: FontsMap | null,
+    showWatermark?: boolean | null,
+    width?: number | "max" | null,
+    tempMask?: MaskMap | null
+) => renderSvg(storageHostname, data, getCorsSafeTemplateData(storageHostname, templateData), fonts, showWatermark, width, tempMask);
 
 const jpgToPDF = async (image: string, filename: string, resolve: (result: string) => void, reject: (result: Error) => void) => {
     // Create a new jsPDF instance

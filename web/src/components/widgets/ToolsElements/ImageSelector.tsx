@@ -3,6 +3,7 @@ import { useState } from "react"
 import ModalPop from "../ModalPop"
 import { nullOrEmpty } from "@/root/src/utils/f"
 import InfoLabel from "../InfoLabel"
+import { getR2ImageCrossOrigin } from "@/root/src/utils/r2"
 
 export interface SelectorOptions {
     [x: string]: {
@@ -36,14 +37,18 @@ interface SelectorOption {
 const SelectorOption: React.FC<SelectorOption> = ({ id, link, downloadImage, title, image, thumbnail,  ...props }) => {
     return (
         <HStack cursor="pointer" justifyContent="flex-start" alignItems="flex-end" mb={4} {...props}>
-            <Box as="image" w="40px" h="40px"
-                backgroundColor="#dfdfdf"
-                style={{
-                    backgroundImage: `url(${thumbnail})`
-                }}
-                backgroundRepeat="no-repeat" 
-                backgroundSize="cover"
-            />
+            <Box w="40px" h="40px" bg="#dfdfdf" overflow="hidden" flex="0 0 auto">
+                {thumbnail ? (
+                    <Image
+                        src={thumbnail}
+                        alt={title}
+                        w="40px"
+                        h="40px"
+                        objectFit="cover"
+                        crossOrigin={getR2ImageCrossOrigin(thumbnail)}
+                    />
+                ) : null}
+            </Box>
             <Text as="div" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">{title}</Text>
         </HStack>
     )
@@ -94,7 +99,7 @@ const ImageSelector: React.FC<ImageSelector> = ({ title, helperText, info, textT
                 if(!disabled) setShowSelector(true) 
             }}>
                 <Box width="auto" height="40px" maxWidth="50px" bg="#dfdfdf">
-                    {thumbnail? <Image src={thumbnail} width="auto" h="40px" objectFit="cover" /> : null}
+                    {thumbnail? <Image src={thumbnail} alt={imageTitle || title} width="auto" h="40px" objectFit="cover" crossOrigin={getR2ImageCrossOrigin(thumbnail)} /> : null}
                 </Box>
                 <Text as="div" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
                     {imageTitle}

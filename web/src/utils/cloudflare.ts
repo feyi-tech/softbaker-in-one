@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { User } from 'firebase/auth';
 import { FIREBASE_FUNCTION_API_BASE_URL } from '../app-config';
+import { normalizeMimeType } from './r2';
 
 // Define interfaces for file object and upload result
 export interface FileObject {
@@ -43,6 +44,7 @@ export const uploadFilesToR2 = async (user: User, files: FileObject[], baseUrl: 
     }
     const { name, ext } = getNameExt(file.name);
     const nameOfFile = onFileName ? onFileName(name, ext) : fileName || file.name;
+    const fileType = normalizeMimeType(file.type);
 
     try {
       // Request presigned URL from backend
@@ -50,7 +52,7 @@ export const uploadFilesToR2 = async (user: User, files: FileObject[], baseUrl: 
       const response = await axios.post(`${FIREBASE_FUNCTION_API_BASE_URL}/get-presigned-url`, {
         id,
         fileName: nameOfFile,
-        fileType: file.type,
+        fileType,
         dir,
       }, {
         headers: {
@@ -65,7 +67,7 @@ export const uploadFilesToR2 = async (user: User, files: FileObject[], baseUrl: 
       // Upload file to presigned URL
       const uploadResponse = await axios.put(presignedUrl, file, {
         headers: {
-          'Content-Type': file.type,
+          'Content-Type': fileType,
         },
       });
 

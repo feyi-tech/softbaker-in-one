@@ -1,4 +1,5 @@
 import { ImageWrapper } from "./polyfills/Image.ts";
+import { normalizeMimeType } from "./mime.ts";
 
 const isNode = typeof window === 'undefined';
   
@@ -97,6 +98,5 @@ export function base64UrlToFile(base64Url: string, fileName?: string, fileType?:
   const blob = new Blob([bytes], { type: fileType });
 
   // Create and return a File from the Blob
-  return new File([blob], fileName, { type: fileType });
+return new File([blob], fileName, { type: fileType });
 }
-import { normalizeMimeType } from "./mime.ts";

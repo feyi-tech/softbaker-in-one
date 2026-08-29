@@ -757,3 +757,17 @@ export const setR2Host = (url: string, r2Domain: string) => {
       return url; // fallback
     }
 };
+
+export const getCorsSafeR2Url = (url: string, r2Domain: string) => {
+    const normalizedUrl = setR2Host(url, r2Domain)
+    try {
+      const parsedUrl = new URL(normalizedUrl);
+      if (isBrowser() && parsedUrl.hostname === r2Domain) {
+        parsedUrl.searchParams.set("r2_cors", "1");
+      }
+      return parsedUrl.toString();
+    } catch (err) {
+      console.error('Invalid URL:', url);
+      return normalizedUrl;
+    }
+};
