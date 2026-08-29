@@ -60,7 +60,7 @@ class WalletFactory {
             this.getWeb3().utils.asciiToHex(salt.toLowerCase()), 64
           );
 
-          this.getContract().methods
+          ;(this.getContract().methods as any)
           .getSaltBalance(paddedSalt)
           .call({}, blockNumber || 'latest')
           .then((result: any) => {

@@ -12,6 +12,7 @@ export interface Config {
     appDomain: string,
     bnbContractAddress: string,
     r2Domain: string,
+    metadataCacheVersion?: string | number,
     refEnabled: boolean,
     minRefWithdrawal: number,
     firebaseConfig: {[x: string]: any}

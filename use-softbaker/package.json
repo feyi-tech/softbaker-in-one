@@ -1,6 +1,6 @@
 {
   "name": "use-softbaker",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "Softbaker Hook",
   "scripts": {
     "dev": "npm --prefix ./example run dev",
@@ -8,7 +8,7 @@
     "link_lib_to_test": "npm --prefix ./example run link use-softbaker",
     "link_test_react_to_lib": "npm i ./example/node_modules/react ./example/node_modules/react-dom ./example/node_modules/@chakra-ui/react",
     "build-old": "rm dist -rf & tsc --rootDir src --outDir dist --declarationDir dist/types --declaration true && rollup -c",
-    "build": "rm dist -rf && rollup -c && tsc -d --emitDeclarationOnly --noEmit false --declarationDir dist",
+    "build": "rm -rf dist && rollup -c && tsc -d --emitDeclarationOnly --noEmit false --declarationDir dist",
     "test": "jest",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"

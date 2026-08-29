@@ -48,6 +48,7 @@ export const USE_SOFTBAKER_CONFIG = {
     appDomain: APP_DOMAIN,
     bnbContractAddress: "",
     r2Domain: R2_DOMAIN,
+    metadataCacheVersion: "2026-08-29-r2-cors-cache",
     refEnabled: true,
     minRefWithdrawal: 20,
     firebaseConfig: FIREBASE_CONFIG
@@ -119,4 +120,3 @@ export const ENDPOINTS = {
     //servicesCategories: "https://firebasestorage.googleapis.com/v0/b/meetofflinenow.appspot.com/o/service-cat-map.json?alt=media&token=30325785-fe65-4cff-8442-ea94ab886f85",
     //productsCategories: "https://firebasestorage.googleapis.com/v0/b/meetofflinenow.appspot.com/o/product-cat-map.json?alt=media&token=7b985100-0d77-4c92-ad3b-6896d138e883"
 }
-

@@ -19,6 +19,15 @@ export interface UseToolsResult extends ToolsData {
 
 const MAX_RETRIES = 5;
 const CACHE_KEY = "tools-cache-metadata";
+const DEFAULT_CACHE_VERSION = "2.4.1";
+const CACHE_VERSION_QUERY_KEY = "sb_cache_version";
+
+interface ToolsCacheMetadata {
+    version?: string;
+    etag?: string;
+    lastModified?: string;
+    cachedData?: ToolsData | null;
+}
 
 // let toolsCache: ToolsData | null = null;
 // let toolsFetchPromise: Promise<ToolsData | null> | null = null;
@@ -40,6 +49,36 @@ const setR2Host = (url: string, r2Domain: string) => {
     }
 };
 
+const getCacheVersion = (config: Config): string => `${config.metadataCacheVersion || DEFAULT_CACHE_VERSION}`;
+
+const getVersionedUrl = (url: string, cacheVersion: string) => {
+    try {
+        const parsedUrl = new URL(url);
+        parsedUrl.searchParams.set(CACHE_VERSION_QUERY_KEY, cacheVersion);
+        return parsedUrl.toString();
+    } catch (err) {
+        return url;
+    }
+};
+
+const readCacheMetadata = (cacheVersion: string): ToolsCacheMetadata | null => {
+    try {
+        const cachedMetadata = localStorage.getItem(CACHE_KEY);
+        if (!cachedMetadata) return null;
+
+        const parsed = JSON.parse(cachedMetadata) as ToolsCacheMetadata;
+        if (parsed.version !== cacheVersion) {
+            localStorage.removeItem(CACHE_KEY);
+            return null;
+        }
+
+        return parsed;
+    } catch (err) {
+        localStorage.removeItem(CACHE_KEY);
+        return null;
+    }
+};
+
 const useTools = (config: Config): UseToolsResult => {
     const [data, setData] = useState<ToolsData | null>(isBrowser()? window.toolsCache : null);
     const [loading, setLoading] = useState<boolean>(!isBrowser() || !window.toolsCache);
@@ -54,21 +93,24 @@ const useTools = (config: Config): UseToolsResult => {
             setData(window.toolsCache);
             setLoading(false);
             consoleLog("useTools.returns as toolsCache already exist: ", window.toolsCache)
-            return;
         }
 
         if (!window.toolsFetchPromise) {
             window.toolsFetchPromise = (async () => {
                 let attempts = 0;
                 let headers: Record<string, string> = {};
+                let cachedData: ToolsData | null = window.toolsCache || null;
+                const cacheVersion = getCacheVersion(config);
 
                 // Retrieve cached metadata
-                const cachedMetadata = localStorage.getItem(CACHE_KEY);
+                const cachedMetadata = readCacheMetadata(cacheVersion);
                 if (cachedMetadata) {
-                    const { etag, lastModified, cachedData } = JSON.parse(cachedMetadata);
-                    if (cachedData) {
-                        window.toolsCache = cachedData;
-                        setData(cachedData);
+                    const { etag, lastModified } = cachedMetadata;
+                    if (cachedMetadata.cachedData) {
+                        cachedData = cachedMetadata.cachedData;
+                        window.toolsCache = cachedMetadata.cachedData;
+                        setData(cachedMetadata.cachedData);
+                        setLoading(false);
                         //setLoading(false);
                         //return cachedData;
                     }
@@ -81,7 +123,7 @@ const useTools = (config: Config): UseToolsResult => {
 
                 while (attempts < MAX_RETRIES) {
                     try {
-                        const response = await axios.get(`https://${config.r2Domain}/templates/tools.json`, {
+                        const response = await axios.get(getVersionedUrl(`https://${config.r2Domain}/templates/tools.json`, cacheVersion), {
                             headers,
                             validateStatus: (status) => status < 500, // Accept 304 Not Modified
                         });
@@ -89,17 +131,29 @@ const useTools = (config: Config): UseToolsResult => {
                         if (response.status === 304) {
                             setLoading(false);
                             consoleLog("useTools.notModied: ", response.status)
-                            return window.toolsCache;
+                            return cachedData;
+                        }
+
+                        if (response.status === 404) {
+                            if (cachedData) return cachedData;
+                            setError("Resource not found (404)");
+                            break;
+                        }
+
+                        if (response.status >= 400) {
+                            throw new Error(`Failed to fetch tools metadata (${response.status})`);
                         }
 
                         window.toolsCache = response.data;
                         setData(response.data);
                         setError(null);
+                        setLoading(false);
 
                         // Save cache metadata
                         localStorage.setItem(
                             CACHE_KEY,
                             JSON.stringify({
+                                version: cacheVersion,
                                 etag: response.headers["etag"],
                                 lastModified: response.headers["last-modified"],
                                 cachedData: response.data,
@@ -110,24 +164,27 @@ const useTools = (config: Config): UseToolsResult => {
                         return response.data;
                     } catch (err: any) {
                         if (err.response?.status === 404) {
+                            if (cachedData) return cachedData;
                             setError("Resource not found (404)");
                             break;
                         }
                         attempts++;
                         if (attempts === MAX_RETRIES) {
+                            if (cachedData) return cachedData;
                             setError("Failed to fetch data after multiple attempts");
                         }
                     }
                 }
                 setLoading(false);
-                return null;
+                return cachedData;
             })();
         }
 
         window.toolsFetchPromise.then((result) => {
             if (result) setData(result);
+            setLoading(false);
         });
-    }, [config?.r2Domain]);
+    }, [config?.r2Domain, config?.metadataCacheVersion]);
 
     useEffect(() => {
         if (data?.tools && !loading && !error) {

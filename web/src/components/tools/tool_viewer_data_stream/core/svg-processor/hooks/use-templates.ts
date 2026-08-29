@@ -3,7 +3,8 @@ import {
     MapWithName, Template, TemplateData, Templates, TemplatesResults, genId, mergeTemplateData, orderByName,
     buildTemplateDataFromSvg, 
     arrayToMap,
-    removeUpdateQueryString
+    removeUpdateQueryString,
+    setR2Host
 } from 'softbaker-svg';
 import axios from 'axios';
 import { nullOrEmpty } from '@/root/src/utils/f';
@@ -68,9 +69,19 @@ const useTemplates = (templates_url?: string | null, disableDefaultPreload?: boo
         return new Promise((resolve, reject) => {
             if(!toolsByTemplatesUrl)  return resolve([])
             //console.log("toolsByTemplatesUrl.GotHere", toolsByTemplatesUrl, rmUpdates(templates_url), toolsByTemplatesUrl[rmUpdates(templates_url)])
-            const templates = toolsByTemplatesUrl[rmUpdates(templates_url)]?.templates || []
+            const templates = toolsByTemplatesUrl[rmUpdates(setR2Host(templates_url, R2_DOMAIN))]?.templates || []
             resolve(templates)
         })
+    }
+
+    const getTemplateDataUrl = (url: string) => {
+        try {
+            const parsedUrl = new URL(setR2Host(url, R2_DOMAIN));
+            parsedUrl.searchParams.set("r2_cors", "1");
+            return parsedUrl.toString();
+        } catch (err) {
+            return url;
+        }
     }
 
     useEffect(() => {
@@ -131,7 +142,7 @@ const useTemplates = (templates_url?: string | null, disableDefaultPreload?: boo
     const MAX_RETRIES = 3;
     const fetchTemplate = (selectedTemplate: Template, retries?: number) => {
 
-        axios.get(selectedTemplate.data_url)
+        axios.get(getTemplateDataUrl(selectedTemplate.data_url))
         .then((selectedTemplateData: any) => {
             setWorkingTemplate({...selectedTemplate})
             setWorkingTemplateData({...selectedTemplateData.data})
