@@ -42,19 +42,21 @@ const getCorsSafeTemplateAssetUrl = (storageHostname: string, url?: string | nul
     }
 }
 
-const getCorsSafeTemplateData = (storageHostname: string, templateData: TemplateData): TemplateData => ({
-    ...templateData,
-    template: {
-        ...templateData.template,
-        logo: getCorsSafeTemplateAssetUrl(storageHostname, templateData.template.logo),
-    },
-    images: Object.fromEntries(
-        Object.entries(templateData.images || {}).map(([key, value]) => [
-            key,
-            getCorsSafeTemplateAssetUrl(storageHostname, value),
-        ])
-    ),
-});
+const getCorsSafeTemplateData = (storageHostname: string, templateData: TemplateData): TemplateData => {
+    const images: FileMap = {};
+    Object.entries(templateData.images || {}).forEach(([key, value]) => {
+        images[key] = getCorsSafeTemplateAssetUrl(storageHostname, value) || "";
+    });
+
+    return {
+        ...templateData,
+        template: {
+            ...templateData.template,
+            logo: getCorsSafeTemplateAssetUrl(storageHostname, templateData.template.logo),
+        },
+        images,
+    };
+};
 
 const getSvg = (
     storageHostname: string,
@@ -233,15 +235,20 @@ const SvgRenderer: React.FC<SvgRenderer>
         if (data && templateData) {
             setAssetsLoading(true);
             setAssetsError(undefined);
-            getSvg(R2_DOMAIN, data, templateData, fonts, showWatermark, docWidth, tempMask)
-            .then(svg => {
-                setAssetsLoading(false);
-                setSvgString(svg);
-            })
-            .catch((e: any) => {
+            try {
+                getSvg(R2_DOMAIN, data, templateData, fonts, showWatermark, docWidth, tempMask)
+                .then(svg => {
+                    setAssetsLoading(false);
+                    setSvgString(svg);
+                })
+                .catch((e: any) => {
+                    setAssetsLoading(false);
+                    setAssetsError(e.message);
+                });
+            } catch (e: any) {
                 setAssetsLoading(false);
                 setAssetsError(e.message);
-            });
+            }
 
         } else if(!templateData) {
             setAssetsLoading(true)
