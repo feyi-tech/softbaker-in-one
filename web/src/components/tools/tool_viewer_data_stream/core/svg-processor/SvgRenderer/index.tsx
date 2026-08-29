@@ -4,7 +4,7 @@ import { Box, HStack, Text, VStack, useBreakpointValue } from "@chakra-ui/react"
 import { FaExclamationTriangle } from "react-icons/fa"
 import { useEffect, useRef, useState } from "react"
 import DocContainer from "@/root/src/components/widgets/ToolsElements/DocContainer"
-import { FieldsData, FileMap, FilterArgs, FontsMap, MaskMap, TemplateData, base64ToFile, getFileFieldFile, getImageDimension, getSvg as renderSvg, setR2Host, rotateTransformValue } from "softbaker-svg"
+import { FieldsData, FileMap, FilterArgs, FontsMap, MaskMap, Template, TemplateData, base64ToFile, getFileFieldFile, getImageDimension, getSvg as renderSvg, setR2Host, rotateTransformValue } from "softbaker-svg"
 import { User } from "firebase/auth"
 import axios from "axios"
 import { resizeImage } from "@/root/src/utils/imageHelperTs"
@@ -47,12 +47,13 @@ const getCorsSafeTemplateData = (storageHostname: string, templateData: Template
     Object.entries(templateData.images || {}).forEach(([key, value]) => {
         images[key] = getCorsSafeTemplateAssetUrl(storageHostname, value) || "";
     });
+    const template = ((templateData as TemplateData & { template?: Partial<Template> }).template || {});
 
     return {
         ...templateData,
         template: {
-            ...templateData.template,
-            logo: getCorsSafeTemplateAssetUrl(storageHostname, templateData.template.logo),
+            ...template,
+            logo: getCorsSafeTemplateAssetUrl(storageHostname, template.logo),
         },
         images,
     };

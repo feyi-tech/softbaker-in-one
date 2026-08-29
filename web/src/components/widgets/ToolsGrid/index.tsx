@@ -9,7 +9,7 @@ import useColorValue from "@/root/src/hooks/useColorValue";
 import Loading from "../Loading";
 import CuteButton from "../CuteButton";
 import { USE_SOFTBAKER_CONFIG } from "@/root/src/app-config";
-import { getR2ImageCrossOrigin } from "@/root/src/utils/r2";
+import { getCorsSafeR2ImageUrl, getR2ImageCrossOrigin } from "@/root/src/utils/r2";
 
 
 interface LinkOrBox {
@@ -125,7 +125,7 @@ const ToolsGrid: React.FC<ToolsGrid> = ({ hideJumper, toolId, templateId }) => {
                             _hover={tool.isActive === false? {} : { transform: "scale(1.05)", transition: "0.3s" }} pt="10px"
                         >
                             <Image
-                                src={(tool as StaticTool).siteLogoUrl || "https://via.placeholder.com/120"}
+                                src={getCorsSafeR2ImageUrl((tool as StaticTool).siteLogoUrl) || "https://via.placeholder.com/120"}
                                 alt={tool.name}
                                 boxSize="220px"
                                 borderRadius="md"
@@ -155,7 +155,7 @@ const ToolsGrid: React.FC<ToolsGrid> = ({ hideJumper, toolId, templateId }) => {
                                     _hover={{ transform: "scale(1.05)", transition: "0.3s" }} pt="10px"
                                 >
                                     <Image
-                                    src={template.thumbnail || "https://via.placeholder.com/120"}
+                                    src={getCorsSafeR2ImageUrl(template.thumbnail) || "https://via.placeholder.com/120"}
                                     alt={template.name}
                                     boxSize="220px"
                                     borderRadius="md"

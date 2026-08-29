@@ -144,11 +144,15 @@ const useTemplates = (templates_url?: string | null, disableDefaultPreload?: boo
 
         axios.get(getTemplateDataUrl(selectedTemplate.data_url))
         .then((selectedTemplateData: any) => {
+            const nextTemplateData = {
+                ...selectedTemplateData.data,
+                template: selectedTemplate
+            }
             setWorkingTemplate({...selectedTemplate})
-            setWorkingTemplateData({...selectedTemplateData.data})
+            setWorkingTemplateData(nextTemplateData)
 
             setSelectedTemplate({...selectedTemplate})
-            setSelectedTemplateData({...selectedTemplateData.data})
+            setSelectedTemplateData(nextTemplateData)
             setSelectedTemplateLoading(false)
         })
         .catch(e => {

@@ -6,7 +6,7 @@ import ModalPop from "../../ModalPop";
 import UploadInput from "../UploadInput";
 import { Template as TemplateProps, Templates } from "softbaker-svg";
 import { FaTrash } from "react-icons/fa";
-import { getR2ImageCrossOrigin } from "@/root/src/utils/r2";
+import { getCorsSafeR2ImageUrl, getR2ImageCrossOrigin } from "@/root/src/utils/r2";
 
 
 const Template: React.FC<TemplateProps> = ({ id, name, logo, onDelete, ...props }) => {
@@ -14,7 +14,7 @@ const Template: React.FC<TemplateProps> = ({ id, name, logo, onDelete, ...props 
     return (
         <HStack cursor="pointer" justifyContent="space-between" alignItems="flex-end" mb={1} mx="0.5rem" {...props}>
             <HStack justifyContent="flex-start" alignItems="flex-end">
-                <Image src={logo || "/res/svg-icon.png"} w="35px" h="35px" borderRadius="5px" border="1px solid #dfdfdf" crossOrigin={getR2ImageCrossOrigin(logo)} />
+                <Image src={getCorsSafeR2ImageUrl(logo) || "/res/svg-icon.png"} w="35px" h="35px" borderRadius="5px" border="1px solid #dfdfdf" crossOrigin={getR2ImageCrossOrigin(logo)} />
                 <Text as="div" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">{ name || "No name yet" }</Text>
             </HStack>
             {
@@ -73,7 +73,7 @@ const TemplateSelector: React.FC<TemplateSelector> = ({
                       setShowTemplates(true)
                   } 
               }}>
-                  { template? <Image src={template.logo || "/res/svg-icon.png"} w="35px" h="35px" borderRadius="5px" border="1px solid #dfdfdf" crossOrigin={getR2ImageCrossOrigin(template.logo)} /> : null }
+                  { template? <Image src={getCorsSafeR2ImageUrl(template.logo) || "/res/svg-icon.png"} w="35px" h="35px" borderRadius="5px" border="1px solid #dfdfdf" crossOrigin={getR2ImageCrossOrigin(template.logo)} /> : null }
                   <Text as="div" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
                       { template? template.name || "No name yet" : "Select Template" }
                   </Text>

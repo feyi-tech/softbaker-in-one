@@ -20,3 +20,18 @@ export const getR2ImageCrossOrigin = (src?: string | null): "anonymous" | undefi
         return undefined
     }
 }
+
+export const getCorsSafeR2ImageUrl = (src?: string | null): string | undefined => {
+    if (!src) return undefined
+    if (src.startsWith("data:") || src.startsWith("/")) return src
+
+    try {
+        const parsedUrl = new URL(src)
+        if (parsedUrl.hostname === R2_DOMAIN) {
+            parsedUrl.searchParams.set("r2_cors", "1")
+        }
+        return parsedUrl.toString()
+    } catch {
+        return src
+    }
+}
