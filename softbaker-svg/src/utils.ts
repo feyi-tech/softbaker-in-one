@@ -3,6 +3,7 @@ import { Doc, Field, Fields, FieldsData, FileMap, MapWithName, MaskMap, Template
 import { mergeImages, removeUpdateQueryString } from "./images-processor.ts";
 import { textGenCodeParser } from "./textGenCodeParser.ts";
 import { getCanvas } from "./imageHelper.ts";
+import { normalizeMimeType } from "./mime.ts";
 
 const isNode = typeof window === 'undefined';
 
@@ -92,7 +93,7 @@ export function base64ToFile(id: string, base64String: string): File | Buffer {
         throw new Error('Invalid Base64 string: ' + base64String? base64String.substring(0, base64String.length > 10? 9 : base64String.length - 1) : "NO base64String");
     }
 
-    const mimeType = matches[1]; // Extract MIME type
+    const mimeType = normalizeMimeType(matches[1]); // Extract MIME type
     const buffer = Buffer.from(matches[2], 'base64');
 
     if (typeof window !== 'undefined') {

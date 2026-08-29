@@ -1,6 +1,17 @@
 
 const { S3Client, PutObjectCommand, DeleteObjectCommand }  = require('@aws-sdk/client-s3');
 
+function normalizeMimeType(mimeType, fallback = 'application/octet-stream') {
+  const normalized = `${mimeType || ''}`.trim().toLowerCase();
+
+  if (!normalized) return fallback;
+  if (normalized.startsWith('img/')) return `image/${normalized.substring('img/'.length)}`;
+  if (normalized === 'image/jpg') return 'image/jpeg';
+  if (normalized === 'image/svg') return 'image/svg+xml';
+
+  return normalized;
+}
+
 /**
  * Extracts the MIME type from a base64url string if it includes a data URI header.
  *
@@ -10,7 +21,7 @@ const { S3Client, PutObjectCommand, DeleteObjectCommand }  = require('@aws-sdk/c
 function getMimeTypeFromBase64Url(base64Url) {
   const regex = /^data:([^;]+);base64,/;
   const matches = base64Url.match(regex);
-  return matches && matches[1] ? matches[1] : 'application/octet-stream';
+  return normalizeMimeType(matches && matches[1] ? matches[1] : null);
 }
 
 /**

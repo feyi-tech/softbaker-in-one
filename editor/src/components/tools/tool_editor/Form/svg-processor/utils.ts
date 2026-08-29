@@ -8,6 +8,7 @@ import { FileObject, UploadResult, getNameExt, sleep, uploadFilesToR2 } from "@/
 import { User } from "firebase/auth";
 import { nullOrEmpty } from "@/root/src/utils/f";
 import { R2_DOMAIN } from "@/root/src/app-config";
+import { normalizeMimeType } from "@/root/src/utils/r2";
 //import UPNG from "upng-js"
 
 /**
@@ -99,7 +100,7 @@ export function base64ToFile(id: string, dataUrl: string): FileImage {
     if (!contentTypeMatch) {
       throw new Error('Invalid base64 data format');
     }
-    const contentType = contentTypeMatch[1];
+    const contentType = normalizeMimeType(contentTypeMatch[1]);
   
     // Decode base64 string to binary data
     const binaryString = atob(base64Data);

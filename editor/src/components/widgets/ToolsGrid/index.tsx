@@ -10,6 +10,7 @@ import Loading from "../Loading";
 import CuteButton from "../CuteButton";
 import { R2_DOMAIN, USE_FRONTBACKED_CONFIG } from "@/root/src/app-config";
 import { setR2Host } from "frontbacked-svg";
+import { getR2ImageCrossOrigin } from "@/root/src/utils/r2";
 
 
 interface LinkOrBox {
@@ -130,6 +131,7 @@ const ToolsGrid: React.FC<ToolsGrid> = ({ hideJumper, toolId, templateId }) => {
                                 boxSize="220px"
                                 borderRadius="md"
                                 objectFit="cover"
+                                crossOrigin={getR2ImageCrossOrigin((tool as StaticTool).siteLogoUrl? setR2Host((tool as StaticTool).siteLogoUrl as any, R2_DOMAIN) : undefined)}
                             />
                             <Text fontSize="sm" fontWeight="bold" mt={2} noOfLines={1}>
                                 {tool.name}
@@ -159,6 +161,7 @@ const ToolsGrid: React.FC<ToolsGrid> = ({ hideJumper, toolId, templateId }) => {
                                     boxSize="220px"
                                     borderRadius="md"
                                     objectFit="cover"
+                                    crossOrigin={getR2ImageCrossOrigin(template.thumbnail? setR2Host(template.thumbnail as any, R2_DOMAIN) : undefined)}
                                     />
                                     <Text fontSize="sm" fontWeight="bold" mt={2} noOfLines={1}>
                                         {template.name}

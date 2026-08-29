@@ -2,6 +2,7 @@ import axios from "axios";
 import { getCanvas } from "./imageHelper.ts";
 import { FileMap, MaskMap } from "./types.ts";
 import { isUploadedFileUrl, setR2Host } from "./utils.ts";
+import { normalizeMimeType } from "./mime.ts";
 
 const isNode = typeof window === 'undefined';
 
@@ -23,8 +24,7 @@ export const fetchImageForBase64 = async (
     });
 
     const buffer = Buffer.from(response.data); // works in both browser & Node.js
-    const mimeType =
-      response.headers["content-type"] || "application/octet-stream";
+    const mimeType = normalizeMimeType(response.headers["content-type"]);
     const base64String = buffer.toString("base64");
 
     return `data:${mimeType};base64,${base64String}`;

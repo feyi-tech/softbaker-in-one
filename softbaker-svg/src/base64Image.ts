@@ -76,7 +76,7 @@ export function base64UrlToFile(base64Url: string, fileName?: string, fileType?:
   const [header, base64Data] = base64Url.split(',');
 
   // Infer the file type from the header if not provided
-  fileType = fileType || header.match(/:(.*?);/)?.[1];
+  fileType = normalizeMimeType(fileType || header.match(/:(.*?);/)?.[1]);
 
   // If the fileName is not provided, generate a random one with an appropriate extension
   if (!fileName) {
@@ -99,3 +99,4 @@ export function base64UrlToFile(base64Url: string, fileName?: string, fileType?:
   // Create and return a File from the Blob
   return new File([blob], fileName, { type: fileType });
 }
+import { normalizeMimeType } from "./mime.ts";

@@ -52,6 +52,17 @@ const getTemplateDownloadSide = (template, selectedSide) => {
   return sides.includes(selectedSide) ? selectedSide : undefined;
 }
 
+const normalizeMimeType = (mimeType, fallback = 'application/octet-stream') => {
+  const normalized = `${mimeType || ''}`.trim().toLowerCase();
+
+  if (!normalized) return fallback;
+  if (normalized.startsWith('img/')) return `image/${normalized.substring('img/'.length)}`;
+  if (normalized === 'image/jpg') return 'image/jpeg';
+  if (normalized === 'image/svg') return 'image/svg+xml';
+
+  return normalized;
+}
+
 //console.log = () => { }
 const getFirebaseTimestamp = (value) => {
   try {
@@ -1564,7 +1575,7 @@ app.post('/get-presigned-url', authenticateFirebaseUser, async (req, res) => {
     const params = {
         Bucket: bucketName,
         Key: `${dir}${dir.endsWith("/")? "" : "/"}${fileName}`,
-        ContentType: fileType,
+        ContentType: normalizeMimeType(fileType),
         ACL: 'public-read', // Optional, adjust as needed for your use case
     };
 

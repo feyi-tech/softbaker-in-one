@@ -5,7 +5,7 @@ import { FaExclamationTriangle } from "react-icons/fa"
 import { useEffect, useRef, useState } from "react"
 import { FiltersInput, OccludedImage, OccludedImagesInput } from "./filters-renderer"
 import DocContainer from "@/root/src/components/widgets/ToolsElements/DocContainer"
-import { FieldsData, FileMap, FilterArgs, FontsMap, MaskMap, TemplateData, base64ToFile, getFileFieldFile, getImageDimension, getSvg, rotateTransformValue } from "frontbacked-svg"
+import { FieldsData, FileMap, FilterArgs, FontsMap, MaskMap, TemplateData, base64ToFile, getFileFieldFile, getImageDimension, getSvg as renderSvg, rotateTransformValue, setR2Host } from "frontbacked-svg"
 import { User } from "firebase/auth"
 import axios from "axios"
 import { resizeImage } from "@/root/src/utils/imageHelperTs"
@@ -31,6 +31,42 @@ const parseError = (error: any) => {
     if(error?.message) return error.message
     return error
 }
+
+const getCorsSafeR2AssetUrl = (storageHostname: string, url: string) => {
+    if (!url || url.startsWith("data:") || url.startsWith("/")) return url;
+
+    try {
+        const parsedUrl = new URL(setR2Host(url, storageHostname));
+        if (parsedUrl.hostname !== storageHostname) return url;
+
+        parsedUrl.searchParams.set("r2_cors", "1");
+        return parsedUrl.toString();
+    } catch {
+        return url;
+    }
+}
+
+const getCorsSafeTemplateData = (storageHostname: string, templateData: TemplateData): TemplateData => {
+    const images = Object.entries(templateData.images || {}).reduce<FileMap>((result, [key, url]) => {
+        result[key] = getCorsSafeR2AssetUrl(storageHostname, url);
+        return result;
+    }, {});
+
+    return {
+        ...templateData,
+        images
+    };
+}
+
+const getSvg = (
+    storageHostname: string,
+    data: FieldsData,
+    templateData: TemplateData,
+    fonts?: FontsMap | null,
+    showWatermark?: boolean | null,
+    width?: number | null,
+    tempMask?: MaskMap | null
+) => renderSvg(storageHostname, data, getCorsSafeTemplateData(storageHostname, templateData), fonts, showWatermark, width, tempMask);
 
 const jpgToPDF = async (image: string, filename: string, resolve: (result: string) => void, reject: (result: Error) => void) => {
     // Create a new jsPDF instance

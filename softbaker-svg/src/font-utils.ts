@@ -3,6 +3,7 @@ import { Font, FontsMap } from './types.ts';
 import { cleanFilename, isBrowser } from './utils.ts';
 import { getCanvas } from './imageHelper.ts';
 import axios from 'axios';
+import { normalizeMimeType } from './mime.ts';
 
 const isNode = typeof window === 'undefined';
 
@@ -55,8 +56,7 @@ async function fetchFontDataAsDataUrl(url: string): Promise<string> {
     });
 
     const buffer = Buffer.from(response.data); // works in both browser & Node.js
-    const mimeType =
-      response.headers["content-type"] || "application/octet-stream";
+    const mimeType = normalizeMimeType(response.headers["content-type"]);
     const base64String = buffer.toString("base64");
 
     return `data:${mimeType};base64,${base64String}`;
